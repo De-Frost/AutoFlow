@@ -15,9 +15,8 @@ Problema que resuelve: en muchos talleres pequeños las citas, los repuestos y l
 Cliente real o potencial:
 
 2. Integrantes  
-Integrante - Usuario de GitHub
 
-Andrey Fabián Picado Arias	- @AndreyKdo //
-José Adrián Arroyo Hidalgo	- @jose-arroyo-dev //
-Sebastián Brenes Alvarado	- @sbrenes26 //
-Erick Eduardo Flores Muñoz	- @De-Frost
+Andrey Fabián Picado Arias	- @AndreyKdo  
+José Adrián Arroyo Hidalgo	- @jose-arroyo-dev  
+Sebastián Brenes Alvarado	- @sbrenes26  
+Erick Eduardo Flores Muñoz	- @De-Frost  
