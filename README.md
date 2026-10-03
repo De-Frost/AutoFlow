@@ -17,7 +17,7 @@ Cliente real o potencial:
 2. Integrantes
 Integrante - Usuario de GitHub
 
-Andrey Picado Arias	- @AndreyKdo //
-[Nombre]	- @jose-arroyo-dev //
-[Nombre]	- @sbrenes26 //
+Andrey Fabián Picado Arias	- @AndreyKdo //
+José Adrián Arroyo Hidalgo	- @jose-arroyo-dev //
+Sebastián Brenes Alvarado	- @sbrenes26 //
 Erick Eduardo Flores Muñoz	- @De-Frost
