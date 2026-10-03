@@ -14,7 +14,7 @@ Problema que resuelve: en muchos talleres pequeños las citas, los repuestos y l
 
 Cliente real o potencial:
 
-2. Integrantes
+2. Integrantes  
 Integrante - Usuario de GitHub
 
 Andrey Fabián Picado Arias	- @AndreyKdo //
