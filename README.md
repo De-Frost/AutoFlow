@@ -12,8 +12,6 @@ Centralizar en una sola aplicación web la operación de un taller mecánico, de
 
 Problema que resuelve: en muchos talleres pequeños las citas, los repuestos y los cobros se llevan en cuadernos u hojas de Excel. Eso provoca pérdida del historial por vehículo, repuestos usados que no se descuentan del inventario y facturas manuales con errores.
 
-Cliente real o potencial:
-
 2. Integrantes  
 
 Andrey Fabián Picado Arias	- @AndreyKdo  
