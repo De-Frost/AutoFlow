@@ -1,8 +1,8 @@
 # AutoFlow
 
-Proyecto Final **SC-403 Desarrollo de Aplicaciones Web y Patrones**
-Universidad Fidélitas
-Profesor: Allam Mauricio Fernández Rivera - Grupo 1
+Proyecto Final **SC-403 Desarrollo de Aplicaciones Web y Patrones** 
+/ Universidad Fidélitas 
+/ Profesor: Allam Mauricio Fernández Rivera - Grupo 1
 
 ## 1. Descripción
 
