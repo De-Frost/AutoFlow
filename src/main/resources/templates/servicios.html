@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+
+        <main class="container py-5">
+            <!-- Submenu de Servicios -->
+            <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+                <div class="col"><a th:href="@{/diagnostico/listado}" class="af-pill">[[#{plantilla.diagnosticos}]]</a></div>
+                <div class="col"><a th:href="@{/orden/listado}" class="af-pill">[[#{plantilla.ordenes}]]</a></div>
+                <div class="col"><a th:href="@{/mecanico/listado}" class="af-pill">[[#{plantilla.mecanicos}]]</a></div>
+                <div class="col"><a th:href="@{/orden/seguimiento}" class="af-pill">[[#{plantilla.seguimiento}]]</a></div>
+            </div>
+        </main>
+
+        <!-- Nombre de la seccion en la esquina inferior izquierda -->
+        <div class="container pb-3"><span class="af-ruta">[[#{plantilla.servicios}]]</span></div>
+
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+    </body>
+</html>

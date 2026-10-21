@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+
+        <main class="container py-4">
+            <!-- Menu principal -->
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 g-lg-4">
+                <div class="col"><a th:href="@{/servicios}" class="af-pill">[[#{plantilla.servicios}]]</a></div>
+                <div class="col"><a th:href="@{/reserva/listado}" class="af-pill">[[#{plantilla.reservas}]]</a></div>
+                <div class="col"><a th:href="@{/recepcion/listado}" class="af-pill">[[#{plantilla.recepcion}]]</a></div>
+                <div class="col"><a th:href="@{/vehiculo/listado}" class="af-pill">[[#{plantilla.vehiculos}]]</a></div>
+                <div class="col"><a th:href="@{/cliente/listado}" class="af-pill">[[#{plantilla.clientes}]]</a></div>
+                <div class="col"><a th:href="@{/espacio/listado}" class="af-pill">[[#{plantilla.espacios}]]</a></div>
+                <div class="col"><a th:href="@{/repuesto/listado}" class="af-pill">[[#{plantilla.repuestos}]]</a></div>
+                <div class="col"><a th:href="@{/factura/pendientes}" class="af-pill">[[#{plantilla.facturacion}]]</a></div>
+            </div>
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+    </body>
+</html>
