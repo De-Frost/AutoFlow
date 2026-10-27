@@ -1,0 +1,143 @@
+
+
+:root {
+    --af-azul: #2f6fd0;        /* azul de los textos y botones del prototipo */
+    --af-azul-claro: #eaf2ff;  /* fondo de los botones al pasar el mouse */
+}
+
+/* Fondo */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #2b2f36;
+    background-image: linear-gradient(rgba(15, 20, 30, .55), rgba(15, 20, 30, .55)),
+        url('../img/fondo-taller.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+main {
+    flex: 1;
+}
+
+/* Logo circular de la esquina superior izquierda */
+.af-logo {
+    flex: 0 0 auto;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--af-azul);
+    font-size: 1.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .35);
+}
+
+/* Íconos circulares */
+.af-icono {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #fff;
+    color: #111;
+    font-size: 1.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .35);
+}
+
+.af-icono:hover,
+.af-logo:hover {
+    background: var(--af-azul-claro);
+    color: var(--af-azul);
+}
+
+/* Barra de busqueda */
+.af-buscar {
+    position: relative;
+    max-width: 520px;
+}
+
+.af-buscar input {
+    padding-right: 2.75rem;
+    height: 44px;
+}
+
+.af-buscar i {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    pointer-events: none;
+}
+
+/* En celular la busqueda baja a su propia linea y los iconos quedan a la derecha del logo */
+@media (max-width: 767.98px) {
+    .af-buscar {
+        order: 10;
+        flex-basis: 100%;
+        max-width: none;
+    }
+
+    .af-primer-icono {
+        margin-left: auto;
+    }
+}
+
+/* Botones */
+.af-pill {
+    display: block;
+    width: 100%;
+    padding: .65rem 1rem;
+    border-radius: 50rem;
+    background: #fff;
+    color: var(--af-azul);
+    font-size: 1.15rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+}
+
+.af-pill:hover,
+.af-pill:focus {
+    background: var(--af-azul-claro);
+    color: var(--af-azul);
+}
+
+/* Tarjetas para formularios y tablas */
+.af-tarjeta {
+    background: #fff;
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .3);
+}
+
+.af-tarjeta-titulo {
+    color: var(--af-azul);
+    font-weight: 600;
+}
+
+/* Nombre de la seccion */
+.af-ruta {
+    color: #8fb8ff;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, .7);
+}
+
+/* Pie de pagina */
+.af-pie {
+    padding: .5rem;
+    color: rgba(255, 255, 255, .75);
+    background: rgba(0, 0, 0, .45);
+}

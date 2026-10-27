@@ -1,0 +1,70 @@
+<head th:fragment="head">
+    <title>AutoFlow</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet"/>
+    <link th:href="@{/css/estilos.css}" rel="stylesheet"/>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</head>
+
+
+<!-- Encabezado y Barra de Busqueda -->
+<header th:fragment="header" class="container py-3">
+    <div class="af-encabezado d-flex flex-wrap align-items-center gap-2 gap-md-3">
+        <a th:href="@{/}" class="af-logo" th:title="#{plantilla.inicio}">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+        </a>
+
+        <form class="af-buscar flex-grow-1" role="search">
+            <input type="search" class="form-control rounded-pill"
+                   th:placeholder="#{plantilla.buscar}" th:aria-label="#{plantilla.buscar}"/>
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </form>
+
+        <a th:href="@{/}" class="af-icono af-primer-icono" th:title="#{plantilla.inicio}" th:aria-label="#{plantilla.inicio}">
+            <i class="fa-solid fa-house"></i></a>
+        <a th:href="@{/factura/pendientes}" class="af-icono d-none d-sm-flex"
+           th:title="#{plantilla.facturacion}" th:aria-label="#{plantilla.facturacion}">
+            <i class="fa-solid fa-cart-shopping"></i></a>
+
+        <!-- Cambio de idioma -->
+        <div class="dropdown">
+            <button class="af-icono border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                    th:title="#{plantilla.idioma}" th:aria-label="#{plantilla.idioma}">
+                <i class="fa-solid fa-globe"></i></button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" th:href="@{/(lang=es)}">Español</a></li>
+                <li><a class="dropdown-item" th:href="@{/(lang=en)}">English</a></li>
+            </ul>
+        </div>
+
+        <!-- Usuario con el login  -->
+        <div class="text-center">
+            <span class="af-icono mx-auto"><i class="fa-solid fa-user"></i></span>
+            <small class="d-block text-white fw-semibold mt-1">[[#{plantilla.usuario}]]</small>
+        </div>
+    </div>
+
+    <!-- Mensajes de las acciones -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div th:if="${todoOk != null}" class="toast show align-items-center text-bg-success border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body"><i class="fa-solid fa-circle-check"></i> [[${todoOk}]]</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+            </div>
+        </div>
+        <div th:if="${error != null}" class="toast show align-items-center text-bg-danger border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body"><i class="fa-solid fa-triangle-exclamation"></i> [[${error}]]</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Pie de Pagina -->
+<footer th:fragment="footer" class="af-pie text-center">
+    <small>[[#{plantilla.derechos}]] &COPY;</small>
+    <script th:src="@{/js/rutinas.js}"></script>
+</footer>

@@ -10,10 +10,19 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 
 @Configuration
 public class ProjectConfig implements WebMvcConfigurer {
-
+    
+    //Paginas que no necesitan un controlador propio
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("index");
+        registry.addViewController("/servicios").setViewName("servicios");
+    }
+    
+    
     //El idioma elegido (español por defecto)
     @Bean
     public LocaleResolver localeResolver() {
