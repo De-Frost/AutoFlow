@@ -1,3 +1,4 @@
+/* AutoFlow - Script de la base de datos */
 
 DROP DATABASE IF EXISTS autoflow;
 CREATE DATABASE autoflow CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -23,7 +24,7 @@ CREATE TABLE usuario (
   FOREIGN KEY fk_usuario_rol (id_rol) REFERENCES rol (id_rol)
 ) ENGINE = InnoDB;
 
-/* ---------- Clientes y vehículos ---------- */
+/* ---------- Clientes y vehiculos ---------- */
 CREATE TABLE cliente (
   id_cliente INT NOT NULL AUTO_INCREMENT,
   identificacion VARCHAR(20) NOT NULL,
@@ -49,7 +50,7 @@ CREATE TABLE vehiculo (
   FOREIGN KEY fk_vehiculo_cliente (id_cliente) REFERENCES cliente (id_cliente)
 ) ENGINE = InnoDB;
 
-/* ---------- Reservas y recepción ---------- */
+/* ---------- Reservas y recepcion ---------- */
 CREATE TABLE espacio (
   id_espacio INT NOT NULL AUTO_INCREMENT,
   codigo VARCHAR(10) NOT NULL,
@@ -66,7 +67,7 @@ CREATE TABLE reserva (
   hora_inicio TIME NOT NULL,
   hora_fin TIME NOT NULL,
   motivo VARCHAR(255) NOT NULL,
-  estado VARCHAR(20) NOT NULL DEFAULT 'Confirmada',
+  estado VARCHAR(20) NOT NULL DEFAULT "Confirmada",
   motivo_cancelacion VARCHAR(255) NULL,
   id_cliente INT NOT NULL,
   id_vehiculo INT NOT NULL,
@@ -93,7 +94,7 @@ CREATE TABLE recepcion (
   FOREIGN KEY fk_recepcion_reserva (id_reserva) REFERENCES reserva (id_reserva)
 ) ENGINE = InnoDB;
 
-/* ---------- Diagnóstico y órdenes ---------- */
+/* ---------- Diagnostico y ordenes ---------- */
 CREATE TABLE diagnostico (
   id_diagnostico INT NOT NULL AUTO_INCREMENT,
   fecha DATETIME NOT NULL,
@@ -110,7 +111,8 @@ CREATE TABLE diagnostico (
 CREATE TABLE orden_servicio (
   id_orden INT NOT NULL AUTO_INCREMENT,
   fecha DATETIME NOT NULL,
-  estado VARCHAR(20) NOT NULL DEFAULT 'Pendiente',
+  estado VARCHAR(20) NOT NULL DEFAULT "Pendiente",
+  fecha_estado DATETIME NULL,
   total DECIMAL(12,2) NULL,
   id_diagnostico INT NOT NULL,
   id_mecanico INT NULL,
@@ -130,7 +132,7 @@ CREATE TABLE detalle_orden_servicio (
   FOREIGN KEY fk_detalle_servicio_orden (id_orden) REFERENCES orden_servicio (id_orden)
 ) ENGINE = InnoDB;
 
-/* ---------- Inventario y facturación ---------- */
+/* ---------- Inventario y facturacion ---------- */
 CREATE TABLE repuesto (
   id_repuesto INT NOT NULL AUTO_INCREMENT,
   codigo VARCHAR(20) NOT NULL,
@@ -155,7 +157,6 @@ CREATE TABLE detalle_orden_repuesto (
   FOREIGN KEY fk_detalle_repuesto_repuesto (id_repuesto) REFERENCES repuesto (id_repuesto)
 ) ENGINE = InnoDB;
 
-/* Tabla transaccional: cada entrada o salida de inventario */
 CREATE TABLE movimiento_inventario (
   id_movimiento INT NOT NULL AUTO_INCREMENT,
   tipo VARCHAR(10) NOT NULL,
@@ -184,19 +185,59 @@ CREATE TABLE factura (
   FOREIGN KEY fk_factura_usuario (id_usuario) REFERENCES usuario (id_usuario)
 ) ENGINE = InnoDB;
 
-
+/*--- Datos ----*/
 INSERT INTO rol (nombre) VALUES
-  ('ADMINISTRADOR'), ('RECEPCIONISTA'), ('MECANICO'), ('CLIENTE');
+  ("ADMINISTRADOR"), ("RECEPCIONISTA"), ("MECANICO"), ("CLIENTE");
 
 INSERT INTO espacio (codigo, nombre, tipo, activo) VALUES
-  ('E-01', 'Elevador 01', 'Elevador', TRUE),
-  ('E-02', 'Bahía 02', 'Bahía', TRUE),
-  ('E-03', 'Bahía 03', 'Bahía', TRUE),
-  ('E-04', 'Elevador 02', 'Elevador', FALSE);
+  ("E-01", "Elevador 01", "Elevador", TRUE),
+  ("E-02", "Bahía 02", "Bahía", TRUE),
+  ("E-03", "Bahía 03", "Bahía", TRUE),
+  ("E-04", "Elevador 02", "Elevador", FALSE);
 
 INSERT INTO repuesto (codigo, nombre, precio, cantidad_disponible, activo) VALUES
-  ('REP001', 'Pastillas de freno delanteras', 32000.00, 12, TRUE),
-  ('REP002', 'Filtro de aceite', 8500.00, 20, TRUE),
-  ('REP003', 'Aceite de motor 5W-30 (litro)', 6500.00, 40, TRUE),
-  ('REP004', 'Bujía de iridio', 9800.00, 16, TRUE),
-  ('REP005', 'Filtro de aire', 11000.00, 3, TRUE);
+  ("REP001", "Pastillas de freno delanteras", 32000.00, 12, TRUE),
+  ("REP002", "Filtro de aceite", 8500.00, 20, TRUE),
+  ("REP003", "Aceite de motor 5W-30 (litro)", 6500.00, 40, TRUE),
+  ("REP004", "Bujía de iridio", 9800.00, 16, TRUE),
+  ("REP005", "Filtro de aire", 11000.00, 3, TRUE);
+
+/*Usuarios del personal: {noop} le indica a Spring Security que la clave no esta encriptada*/
+INSERT INTO usuario (username, password, nombre, activo, id_rol) VALUES
+  ("admin", "{noop}Admin1", "Administrador del taller", TRUE, 1),
+  ("recepcion", "{noop}Recep1", "Laura Mora Solano", TRUE, 2),
+  ("mecanico1", "{noop}Meca1", "Carlos Vargas Rojas", TRUE, 3),
+  ("mecanico2", "{noop}Meca2", "Diego Jiménez Castro", TRUE, 3);
+
+INSERT INTO cliente (identificacion, nombre, telefono, correo) VALUES
+  ("1-1111-1111", "Ana Quesada Ramírez", "8888-1111", "ana.quesada@correo.com"),
+  ("2-2222-2222", "Mario Solís Chaves", "8888-2222", NULL),
+  ("3-3333-3333", "Sofía Araya León", "8888-3333", "sofia.araya@correo.com");
+
+INSERT INTO vehiculo (placa, marca, modelo, anio, id_cliente) VALUES
+  ("BCD123", "Toyota", "Corolla", 2018, 1),
+  ("FGH456", "Hyundai", "Tucson", 2021, 1),
+  ("JKL789", "Nissan", "Sentra", 2016, 2),
+  ("MNP321", "Suzuki", "Swift", 2020, 3);
+
+INSERT INTO reserva (fecha, hora_inicio, hora_fin, motivo, estado, id_cliente, id_vehiculo, id_espacio) VALUES
+  (CURDATE() + INTERVAL 1 DAY, "08:00", "10:00", "Cambio de aceite y filtros", "Confirmada", 1, 1, 1),
+  (CURDATE() + INTERVAL 1 DAY, "10:00", "12:00", "Revisión de frenos", "Confirmada", 2, 3, 2);
+
+INSERT INTO recepcion (fecha_ingreso, kilometraje, nivel_combustible, danos_visibles, objetos_personales, falla_reportada, id_vehiculo, id_reserva) VALUES
+  (NOW() - INTERVAL 1 DAY, 85400, "1/2", NULL, NULL, "Ruido al frenar", 2, NULL),
+  (NOW(), 42100, "3/4", "Rayón en puerta trasera", "Silla de bebé", "Luz de motor encendida", 4, NULL);
+
+INSERT INTO diagnostico (fecha, fallas_encontradas, trabajos_necesarios, id_recepcion, id_mecanico) VALUES
+  (NOW() - INTERVAL 1 DAY, "Pastillas delanteras desgastadas", "Cambio de pastillas delanteras", 1, 3);
+
+INSERT INTO orden_servicio (fecha, estado, fecha_estado, total, id_diagnostico, id_mecanico) VALUES
+  (NOW() - INTERVAL 1 DAY, "En proceso", NOW(), 25000.00, 1, 3);
+
+INSERT INTO detalle_orden_servicio (descripcion, cantidad, costo, id_orden) VALUES
+  ("Mano de obra cambio de pastillas", 1, 25000.00, 1);
+  
+  
+  /*--- Pruebas --- */
+SELECT username, password FROM autoflow.usuario;  
+SELECT * FROM autoflow.reserva;
