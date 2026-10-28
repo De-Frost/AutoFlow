@@ -3,10 +3,10 @@
     <div class="af-tarjeta">
         <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
             <h1 class="af-tarjeta-titulo h4 m-0 me-auto">
-                <i class="fa-solid fa-boxes-stacked"></i> [[#{repuesto.listado}]]
+                <i class="fa-solid fa-boxes-stacked"></i> [[#{repuesto.listado}]] <!-- Icono de fontawesome.com -->
                 <span class="badge text-bg-primary">[[${totalRepuestos}]]</span>
             </h1>
-            <!-- Búsqueda por código o nombre -->
+            <!-- Busqueda por codigo o nombre -->
             <form th:action="@{/repuesto/listado}" method="get" class="d-flex gap-2" role="search">
                 <input type="search" name="buscar" th:value="${buscar}" class="form-control"
                        th:placeholder="#{repuesto.buscar}" th:aria-label="#{repuesto.buscar}"/>
@@ -36,7 +36,6 @@
                         <td class="text-end">[[${#numbers.formatDecimal(r.precio, 1, 'COMMA', 2, 'POINT')}]]</td>
                         <td class="text-end">
                             [[${r.cantidadDisponible}]]
-                            <!-- Aviso visual cuando quedan pocas unidades -->
                             <span th:if="${r.cantidadDisponible <= 3}" class="badge text-bg-warning">[[#{repuesto.pocos}]]</span>
                         </td>
                         <td>
@@ -85,7 +84,6 @@
                         <div class="row">
                             <div class="col-sm-6 mb-3">
                                 <label for="precio" class="form-label">[[#{repuesto.precio}]]</label>
-                                <!-- min="0": el precio no puede ser negativo -->
                                 <input type="number" id="precio" name="precio" class="form-control"
                                        min="0" step="0.01" required="true"/></div>
                             <div class="col-sm-6 mb-3">
@@ -95,7 +93,6 @@
                         </div>
                         <div class="form-check mb-3">
                             <input type="checkbox" id="activo" name="activo" class="form-check-input" checked="checked"/>
-                            <!-- Si el checkbox se desmarca, este campo hace que Spring guarde activo = false -->
                             <input type="hidden" name="_activo" value="on"/>
                             <label for="activo" class="form-check-label">[[#{texto.activo}]]</label></div>
                     </div>
