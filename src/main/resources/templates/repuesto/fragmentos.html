@@ -1,0 +1,175 @@
+<!-- Inventario de repuestos con busqueda y boton registrar -->
+<section th:fragment="listado" class="container py-3">
+    <div class="af-tarjeta">
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+            <h1 class="af-tarjeta-titulo h4 m-0 me-auto">
+                <i class="fa-solid fa-boxes-stacked"></i> [[#{repuesto.listado}]] <!-- Icono de fontawesome.com -->
+                <span class="badge text-bg-primary">[[${totalRepuestos}]]</span>
+            </h1>
+            <!-- Busqueda por codigo o nombre -->
+            <form th:action="@{/repuesto/listado}" method="get" class="d-flex gap-2" role="search">
+                <input type="search" name="buscar" th:value="${buscar}" class="form-control"
+                       th:placeholder="#{repuesto.buscar}" th:aria-label="#{repuesto.buscar}"/>
+                <button type="submit" class="btn btn-outline-primary" th:aria-label="#{repuesto.buscar}">
+                    <i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+            <button type="button" class="btn btn-primary"
+                    data-bs-toggle="modal" data-bs-target="#agregarRepuestoModal">
+                <i class="fa-solid fa-plus"></i> [[#{repuesto.agregar}]]</button>
+        </div>
+
+        <div th:if="${repuestos != null and !repuestos.empty}" class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead><tr>
+                        <th>[[#{repuesto.codigo}]]</th>
+                        <th>[[#{repuesto.nombre}]]</th>
+                        <th class="text-end">[[#{repuesto.precio}]]</th>
+                        <th class="text-end">[[#{repuesto.cantidad}]]</th>
+                        <th>[[#{repuesto.estado}]]</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="r : ${repuestos}">
+                        <td class="fw-semibold">[[${r.codigo}]]</td>
+                        <td>[[${r.nombre}]]</td>
+                        <td class="text-end">[[${#numbers.formatDecimal(r.precio, 1, 'COMMA', 2, 'POINT')}]]</td>
+                        <td class="text-end">
+                            [[${r.cantidadDisponible}]]
+                            <span th:if="${r.cantidadDisponible <= 3}" class="badge text-bg-warning">[[#{repuesto.pocos}]]</span>
+                        </td>
+                        <td>
+                            <span th:if="${r.activo}" class="badge text-bg-success">[[#{texto.activo}]]</span>
+                            <span th:unless="${r.activo}" class="badge text-bg-secondary">[[#{texto.inactivo}]]</span>
+                        </td>
+                        <td class="text-nowrap text-end">
+                            <a th:href="@{/repuesto/modificar/}+${r.idRepuesto}" class="btn btn-warning btn-sm">
+                                <i class="fas fa-pencil-alt"></i> [[#{accion.actualizar}]]</a>
+                            <button type="button" class="btn btn-danger btn-sm"
+                                    data-bs-toggle="modal" data-bs-target="#confirmModal"
+                                    th:data-bs-id="${r.idRepuesto}"
+                                    th:data-bs-descripcion="${r.codigo} + ' - ' + ${r.nombre}">
+                                <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center p-2" th:if="${repuestos == null or repuestos.empty}">
+            <span>[[#{lista.vacia}]]</span></div>
+    </div>
+</section>
+
+<!-- Ventana para registrar un repuesto -->
+<section th:fragment="agregar">
+    <div class="modal fade" id="agregarRepuestoModal" tabindex="-1"
+         aria-labelledby="agregarRepuestoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h2 class="modal-title fs-5" id="agregarRepuestoLabel">
+                        <i class="fa-solid fa-boxes-stacked"></i> [[#{repuesto.agregar}]]</h2>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/repuesto/guardar}" th:object="${repuesto}" class="was-validated" method="post">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="codigo" class="form-label">[[#{repuesto.codigo}]]</label>
+                            <input type="text" id="codigo" name="codigo" class="form-control"
+                                   maxlength="20" placeholder="REP006" required="true"/></div>
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">[[#{repuesto.nombre}]]</label>
+                            <input type="text" id="nombre" name="nombre" class="form-control"
+                                   maxlength="100" required="true"/></div>
+                        <div class="row">
+                            <div class="col-sm-6 mb-3">
+                                <label for="precio" class="form-label">[[#{repuesto.precio}]]</label>
+                                <input type="number" id="precio" name="precio" class="form-control"
+                                       min="0" step="0.01" required="true"/></div>
+                            <div class="col-sm-6 mb-3">
+                                <label for="cantidadDisponible" class="form-label">[[#{repuesto.cantidad}]]</label>
+                                <input type="number" id="cantidadDisponible" name="cantidadDisponible" class="form-control"
+                                       min="0" step="1" required="true"/></div>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input type="checkbox" id="activo" name="activo" class="form-check-input" checked="checked"/>
+                            <input type="hidden" name="_activo" value="on"/>
+                            <label for="activo" class="form-check-label">[[#{texto.activo}]]</label></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-floppy-disk"></i> [[#{accion.guardar}]]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Actualizar un repuesto -->
+<section th:fragment="editar" class="container py-3">
+    <div class="af-tarjeta mx-auto" style="max-width: 640px;">
+        <h1 class="af-tarjeta-titulo h4 mb-3"><i class="fa-solid fa-pen"></i> [[#{repuesto.modificar}]]</h1>
+        <form method="post" th:action="@{/repuesto/guardar}" th:object="${repuesto}" class="was-validated">
+            <input type="hidden" th:field="*{idRepuesto}"/>
+            <div class="mb-3">
+                <label for="codigo" class="form-label">[[#{repuesto.codigo}]]</label>
+                <input type="text" class="form-control" th:field="*{codigo}" maxlength="20" required="true"/>
+            </div>
+            <div class="mb-3">
+                <label for="nombre" class="form-label">[[#{repuesto.nombre}]]</label>
+                <input type="text" class="form-control" th:field="*{nombre}" maxlength="100" required="true"/>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 mb-3">
+                    <label for="precio" class="form-label">[[#{repuesto.precio}]]</label>
+                    <input type="number" class="form-control" th:field="*{precio}" min="0" step="0.01" required="true"/>
+                </div>
+                <div class="col-sm-6 mb-3">
+                    <label for="cantidadDisponible" class="form-label">[[#{repuesto.cantidad}]]</label>
+                    <input type="number" class="form-control" th:field="*{cantidadDisponible}" min="0" step="1" required="true"/>
+                </div>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" th:field="*{activo}"/>
+                <label class="form-check-label" for="activo1">[[#{texto.activo}]]</label>
+            </div>
+            <div class="d-flex gap-2 justify-content-end">
+                <a th:href="@{/repuesto/listado}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]</a>
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-check"></i> [[#{repuesto.guardarcambios}]]</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Confirmar que se elimina un repuesto -->
+<section th:fragment="confirmarEliminar">
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form th:action="@{/repuesto/eliminar}" method="post">
+                    <input type="hidden" name="idRepuesto" id="modalId"/>
+                    <div class="modal-header bg-warning">
+                        <h2 class="modal-title fs-5" id="modalLabel">
+                            <i class="fa-solid fa-triangle-exclamation"></i> [[#{accion.confirmar}]]</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>[[#{accion.confirmar.texto1}]] <strong id="modalDescripcion"></strong>?</p>
+                        <p class="m-0">[[#{accion.confirmar.texto2}]]</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
