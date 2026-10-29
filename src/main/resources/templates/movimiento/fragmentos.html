@@ -1,0 +1,112 @@
+<!-- Registrar el consumo de un repuesto en una orden -->
+<section th:fragment="consumo" class="container py-3">
+    <div class="af-tarjeta">
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+            <h1 class="af-tarjeta-titulo h4 m-0 me-auto">
+                <i class="fa-solid fa-dolly"></i> [[#{movimiento.consumo}]]</h1>
+            <a th:href="@{/repuesto/listado}" class="btn btn-outline-primary">
+                <i class="fa-solid fa-boxes-stacked"></i> [[#{repuesto.listado}]]</a>
+        </div>
+
+        <!-- Elegir la orden. Al cambiarla, la pagina se recarga y muestra sus repuestos ya usados -->
+        <form th:action="@{/movimiento/listado}" method="get" class="mb-3">
+            <label for="ordenElegida" class="form-label">[[#{movimiento.orden}]]</label>
+            <select id="ordenElegida" name="idOrden" class="form-select" onchange="this.form.submit()">
+                <option value="">[[#{movimiento.elegirorden}]]</option>
+                <option th:each="o : ${ordenes}" th:value="${o.idOrden}" th:selected="${o.idOrden == idOrden}"
+                        th:text="|#${o.idOrden} · ${o.diagnostico.recepcion.vehiculo.placa} · ${o.diagnostico.recepcion.vehiculo.cliente.nombre} (${o.estado})|"></option>
+            </select>
+        </form>
+
+        <!-- Repuesto y cantidad -->
+        <form th:if="${idOrden != null}" th:action="@{/movimiento/consumo}" method="post" class="was-validated">
+            <input type="hidden" name="idOrden" th:value="${idOrden}"/>
+            <div class="row g-3 align-items-end">
+                <div class="col-md-6">
+                    <label for="idRepuesto" class="form-label">[[#{movimiento.repuesto}]]</label>
+                    <select id="idRepuesto" name="idRepuesto" class="form-select" required="true">
+                        <option value="">[[#{movimiento.elegirrepuesto}]]</option>
+                        <!-- data-stock guarda la cantidad disponible para que movimiento.js la muestre -->
+                        <option th:each="r : ${repuestos}" th:value="${r.idRepuesto}" th:data-stock="${r.cantidadDisponible}"
+                                th:text="${r.codigo} + ' · ' + ${r.nombre}"></option>
+                    </select>
+                </div>
+                <div class="col-6 col-md-2">
+                    <span class="form-label d-block">[[#{movimiento.stock}]]</span>
+                    <span id="stockDisponible" class="badge text-bg-info fs-6">—</span>
+                </div>
+                <div class="col-6 col-md-2">
+                    <label for="cantidad" class="form-label">[[#{movimiento.cantidad}]]</label>
+                    <input type="number" id="cantidad" name="cantidad" class="form-control" min="1" step="1" value="1" required="true"/>
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fa-solid fa-check"></i> [[#{movimiento.registrar}]]</button>
+                </div>
+            </div>
+        </form>
+        <div th:if="${ordenes.empty}" class="text-center p-2"><span>[[#{movimiento.sinordenes}]]</span></div>
+    </div>
+    <script th:src="@{/js/movimiento.js}"></script>
+</section>
+
+<!-- Repuestos ya registrados en la orden elegida -->
+<section th:fragment="usados" class="container pb-3">
+    <div class="af-tarjeta" th:if="${idOrden != null}">
+        <h2 class="af-tarjeta-titulo h5 mb-3"><i class="fa-solid fa-file-invoice"></i>
+            [[#{movimiento.usados}]] #[[${idOrden}]]</h2>
+        <div th:if="${!usados.empty}" class="table-responsive">
+            <table class="table align-middle">
+                <thead><tr>
+                        <th>[[#{movimiento.repuesto}]]</th>
+                        <th class="text-end">[[#{movimiento.cantidad}]]</th>
+                        <th class="text-end">[[#{movimiento.precio}]]</th>
+                        <th class="text-end">[[#{movimiento.subtotal}]]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="d : ${usados}">
+                        <td>[[${d.repuesto.codigo}]] · [[${d.repuesto.nombre}]]</td>
+                        <td class="text-end">[[${d.cantidad}]]</td>
+                        <td class="text-end">[[${#numbers.formatDecimal(d.precioUnitario, 1, 'COMMA', 2, 'POINT')}]]</td>
+                        <td class="text-end">[[${#numbers.formatDecimal(d.precioUnitario * d.cantidad, 1, 'COMMA', 2, 'POINT')}]]</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center p-2" th:if="${usados.empty}"><span>[[#{lista.vacia}]]</span></div>
+    </div>
+</section>
+
+<!-- Historial de movimientos de inventario -->
+<section th:fragment="historial" class="container pb-3">
+    <div class="af-tarjeta">
+        <h2 class="af-tarjeta-titulo h5 mb-3"><i class="fa-solid fa-clock-rotate-left"></i> [[#{movimiento.historial}]]</h2>
+        <div th:if="${!movimientos.empty}" class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead><tr>
+                        <th>[[#{movimiento.fecha}]]</th>
+                        <th>[[#{movimiento.tipo}]]</th>
+                        <th>[[#{movimiento.repuesto}]]</th>
+                        <th class="text-end">[[#{movimiento.cantidad}]]</th>
+                        <th class="text-end">[[#{movimiento.stockanterior}]]</th>
+                        <th class="text-end">[[#{movimiento.stocknuevo}]]</th>
+                        <th>[[#{movimiento.orden}]]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="m : ${movimientos}">
+                        <td>[[${#temporals.format(m.fecha, 'dd/MM/yyyy HH:mm')}]]</td>
+                        <td><span class="badge" th:classappend="${m.tipo == 'SALIDA'} ? 'text-bg-danger' : 'text-bg-success'">[[${m.tipo}]]</span></td>
+                        <td>[[${m.repuesto.codigo}]] · [[${m.repuesto.nombre}]]</td>
+                        <td class="text-end">[[${m.cantidad}]]</td>
+                        <td class="text-end">[[${m.stockAnterior}]]</td>
+                        <td class="text-end fw-semibold">[[${m.stockNuevo}]]</td>
+                        <td>[[${m.orden != null} ? '#' + ${m.orden.idOrden} : '—']]</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center p-2" th:if="${movimientos.empty}"><span>[[#{lista.vacia}]]</span></div>
+    </div>
+</section>

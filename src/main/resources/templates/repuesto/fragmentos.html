@@ -13,6 +13,9 @@
                 <button type="submit" class="btn btn-outline-primary" th:aria-label="#{repuesto.buscar}">
                     <i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
+            <!-- Enlace a Movimientos para registrar el consumo de repuestos en una orden -->
+            <a th:href="@{/movimiento/listado}" class="btn btn-outline-primary">
+                <i class="fa-solid fa-dolly"></i> [[#{plantilla.movimientos}]]</a>
             <button type="button" class="btn btn-primary"
                     data-bs-toggle="modal" data-bs-target="#agregarRepuestoModal">
                 <i class="fa-solid fa-plus"></i> [[#{repuesto.agregar}]]</button>
