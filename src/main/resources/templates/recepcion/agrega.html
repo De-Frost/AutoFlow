@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+
+        <main>
+            <section th:replace="~{recepcion/fragmentos :: agregar}"/>
+        </main>
+
+        <!-- Nombre de la seccion -->
+        <div class="container pb-3"><span class="af-ruta">[[#{recepcion.ruta.estadoInicial}]]</span></div>
+
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+        <script th:src="@{/js/recepcion.js}"></script>
+    </body>
+</html>
