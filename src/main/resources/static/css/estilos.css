@@ -174,3 +174,14 @@ main {
 .af-tabla-servicios td { padding-block: 1.2rem; vertical-align: middle; }
 .af-servicio-nombre { display: inline-block; border-radius: 24px; padding: .3rem .8rem; background: #599afa; color: white; }
 @media (max-width: 575px) { .af-linea-servicio { grid-template-columns: 1fr 1fr; } .af-linea-servicio label:first-child { grid-column: 1 / -1; } }
+
+/* HU-R14: diagnóstico técnico */
+.af-diagnostico { max-width: 860px; padding: 28px; }
+.af-filtro-diagnostico { display: flex; gap: .75rem; margin: 1.5rem 0; }
+.af-filtro-diagnostico input { border-radius: 30px; background: #599afa; color: #fff; padding: .7rem 1.3rem; }
+.af-filtro-diagnostico input::placeholder { color: #fff; opacity: 1; }
+.af-campo-diagnostico { background: #599afa; color: #fff; border-radius: 28px; padding: 14px 24px; margin: 1rem 0; }
+.af-campo-diagnostico label { display: block; font-weight: 600; }
+.af-campo-diagnostico textarea { display: block; width: 100%; background: transparent; color: #fff; border: 0; resize: vertical; min-height: 70px; padding: .4rem 0; }
+.af-campo-diagnostico textarea:focus-visible { outline: 2px solid white; outline-offset: 3px; border-radius: 4px; }
+@media (max-width: 575px) { .af-diagnostico { padding: 20px; } .af-filtro-diagnostico { flex-wrap: wrap; } }
