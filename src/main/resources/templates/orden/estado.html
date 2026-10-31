@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body><header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container af-hu16"><section class="af-tarjeta af-orden">
+<h1>Actualizar estado de la orden</h1><p th:text="${'Orden OS-' + orden.idOrden + ' · Estado actual: ' + orden.estado}"></p>
+<form class="af-estados" method="post" th:action="@{/orden/{id}/estado(id=${orden.idOrden})}">
+<button class="af-boton" type="submit" name="estado" th:each="estado : ${estados}" th:value="${estado}" th:text="${estado}" th:attr="aria-pressed=${estado == orden.estado}"></button></form>
+<a th:href="@{/orden/{id}(id=${orden.idOrden})}">← Volver a la orden</a>
+</section></main><div class="container pb-3 af-ruta">Mecánicos / Servicios</div>
+<footer th:replace="~{general/fragmentos :: footer}"></footer></body></html>

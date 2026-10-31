@@ -5,6 +5,30 @@
     --af-azul-claro: #eaf2ff;  /* fondo de los botones al pasar el mouse */
 }
 
+/* HU16: asignación y seguimiento de órdenes */
+.af-hu16 { display: flex; justify-content: center; align-items: center; padding-block: 1.5rem 3rem; }
+.af-orden { width: 100%; max-width: 540px; color: #3678d9; border-radius: 28px; padding: 24px; font-size: 1.1rem; font-weight: 500; }
+.af-orden h1, .af-volver { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.25rem; }
+.af-orden h2 { font-size: 1.05rem; text-transform: uppercase; margin: 1.6rem 0 .6rem; }
+.af-orden a { color: inherit; }
+.af-volver { display: block; text-decoration: none; }
+.af-datos { display: grid; grid-template-columns: auto auto; gap: .4rem 1rem; }
+.af-multilinea { white-space: pre-line; overflow-wrap: anywhere; }
+.af-mecanico { display: flex; align-items: center; justify-content: space-between; gap: 1rem; background: #599afa; color: white; border-radius: 28px; padding: 14px 18px; margin: 2rem 0; }
+.af-mecanico p { margin: .3rem 0 0; }
+.af-seleccionar { border: 0; border-radius: 30px; padding: .35rem 1rem; background: white; color: #3678d9 !important; text-decoration: none; font-size: .95rem; }
+.af-boton { border: 0; border-radius: 30px; background: #599afa; color: white !important; padding: .35rem 1.3rem; text-decoration: none; text-align: center; }
+.af-acciones { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: .75rem; margin-top: 1rem; }
+.af-confirmacion { background: #599afa; color: white; text-align: center; padding: 1.6rem; border-radius: 28px; margin: 1rem 0 1.5rem; }
+.af-confirmacion p { margin: 1.5rem 0; }
+.af-estados { display: flex; flex-direction: column; align-items: center; gap: 1.2rem; padding: 2rem 0; }
+.af-estados button { min-width: 150px; }
+.af-estados [aria-pressed="true"] { outline: 3px solid #254c83; outline-offset: 3px; }
+.af-estado { display: inline-block; width: 15px; height: 15px; border-radius: 50%; }
+.af-pendiente { background: #ffd126; } .af-proceso { background: #2784ed; } .af-finalizada { background: #22995a; }
+.af-orden button:focus-visible, .af-orden a:focus-visible { outline: 3px solid #254c83; outline-offset: 4px; }
+@media (max-width: 575px) { .af-datos { grid-template-columns: 1fr; } .af-mecanico { flex-wrap: wrap; } .af-orden { padding: 20px; } }
+
 /* Fondo */
 body {
     min-height: 100vh;

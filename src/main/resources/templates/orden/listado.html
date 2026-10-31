@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body><header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container af-hu16"><section class="af-tarjeta af-orden">
+<h1>Órdenes de servicio</h1>
+<p th:if="${#lists.isEmpty(ordenes)}">No hay órdenes de servicio registradas.</p>
+<article class="af-mecanico" th:each="orden : ${ordenes}">
+<div><strong th:text="${'Orden OS-' + orden.idOrden}"></strong><p th:text="${orden.diagnostico.recepcion.vehiculo.placa + ' · ' + orden.estado}"></p>
+<small th:text="${orden.mecanico != null ? orden.mecanico.nombre : 'Sin mecánico asignado'}"></small></div>
+<a class="af-seleccionar" th:href="@{/orden/{id}(id=${orden.idOrden})}">Ver orden</a></article>
+<a th:href="@{/servicios}">← Servicios</a>
+</section></main><div class="container pb-3 af-ruta">Mecánicos / Servicios</div>
+<footer th:replace="~{general/fragmentos :: footer}"></footer></body></html>
