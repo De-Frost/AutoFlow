@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body><header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container af-hu16"><section class="af-tarjeta af-orden"><a class="af-volver" th:href="@{/orden/nueva}">← Órdenes de servicio</a>
+<h1>Generar orden de servicio</h1>
+<div th:with="v=${diagnostico.recepcion.vehiculo}">
+<h2>Información del cliente</h2><div class="af-datos">
+<span th:text="${v.cliente.nombre}"></span><span th:text="${'Identificación: ' + v.cliente.identificacion}"></span>
+<span th:text="${v.marca + ' ' + v.modelo}"></span><span th:text="${'Placa: ' + v.placa}"></span></div></div>
+<h2>Diagnóstico</h2><p class="af-multilinea" th:text="${diagnostico.fallasEncontradas}"></p>
+<h2>Trabajo necesario</h2><p class="af-multilinea" th:text="${diagnostico.trabajosNecesarios}"></p>
+<form method="post" th:action="@{/orden/generar/{id}(id=${diagnostico.idDiagnostico})}">
+<h2>Servicios a realizar</h2><p class="small">Indique el costo unitario de cada servicio.</p>
+<div id="lineas-servicio">
+<div class="af-linea-servicio" th:each="descripcion, i : ${formulario.descripcion}">
+<label>Servicio<input class="form-control" name="descripcion" maxlength="150" required th:value="${descripcion}"/></label>
+<label>Cantidad<input class="form-control" name="cantidad" type="number" min="1" max="2147483647" required th:value="${formulario.cantidad.size() > i.index ? formulario.cantidad[i.index] : 1}"/></label>
+<label>Costo unitario<input class="form-control" name="costo" type="number" min="0" max="9999999999.99" step="0.01" required th:value="${formulario.costo.size() > i.index ? formulario.costo[i.index] : 0}"/></label>
+<button type="button" class="btn btn-outline-danger af-quitar">Quitar</button></div>
+</div>
+<button id="agregar-servicio" type="button" class="btn btn-outline-primary mt-2">Agregar servicio</button>
+<div class="af-acciones"><button class="af-boton" type="submit">Generar orden</button></div></form>
+<template id="linea-servicio"><div class="af-linea-servicio">
+<label>Servicio<input class="form-control" name="descripcion" maxlength="150" required/></label>
+<label>Cantidad<input class="form-control" name="cantidad" type="number" min="1" max="2147483647" value="1" required/></label>
+<label>Costo unitario<input class="form-control" name="costo" type="number" min="0" max="9999999999.99" step="0.01" required/></label>
+<button type="button" class="btn btn-outline-danger af-quitar">Quitar</button></div></template>
+<script th:src="@{/js/orden.js}"></script></section></main><div class="container pb-3 af-ruta">Órdenes / Servicios</div>
+<footer th:replace="~{general/fragmentos :: footer}"></footer></body></html>
