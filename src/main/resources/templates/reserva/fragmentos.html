@@ -1,0 +1,75 @@
+<!-- HU-R06: Listado de reservas con filtros -->
+<section th:fragment="listado" class="container py-3">
+    <div class="af-tarjeta">
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+            <h1 class="af-tarjeta-titulo h4 m-0 me-auto">
+                <i class="fa-solid fa-calendar-days"></i> [[#{reserva.listado}]]
+                <span class="badge text-bg-primary">[[${totalReservas}]]</span>
+            </h1>
+            <!-- Aqui va el boton "Registrar reserva" (HU-R03) -->
+        </div>
+
+        <!-- Filtros -->
+        <form th:action="@{/reserva/listado}" method="get" class="row g-2 align-items-end mb-3">
+            <div class="col-sm-6 col-lg-3">
+                <label for="fecha" class="form-label">[[#{reserva.fecha}]]</label>
+                <input type="date" id="fecha" name="fecha" th:value="${fecha}" class="form-control"/>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <label for="estado" class="form-label">[[#{reserva.estado}]]</label>
+                <select id="estado" name="estado" class="form-select">
+                    <option value="">[[#{reserva.todos}]]</option>
+                    <option value="Confirmada" th:selected="${estado == 'Confirmada'}">[[#{reserva.confirmada}]]</option>
+                    <option value="Cancelada" th:selected="${estado == 'Cancelada'}">[[#{reserva.cancelada}]]</option>
+                </select>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <label for="placa" class="form-label">[[#{reserva.placa}]]</label>
+                <input type="search" id="placa" name="placa" th:value="${placa}" class="form-control" maxlength="10"/>
+            </div>
+            <div class="col-sm-6 col-lg-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-fill">
+                    <i class="fa-solid fa-magnifying-glass"></i> [[#{reserva.buscar}]]</button>
+                <a th:href="@{/reserva/listado}" class="btn btn-secondary flex-fill">
+                    <i class="fa-solid fa-eraser"></i> [[#{reserva.limpiar}]]</a>
+            </div>
+        </form>
+
+        <div th:if="${reservas != null and !reservas.empty}" class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead><tr>
+                        <th>#</th>
+                        <th>[[#{reserva.fecha}]]</th>
+                        <th>[[#{reserva.horario}]]</th>
+                        <th>[[#{reserva.espacio}]]</th>
+                        <th>[[#{reserva.cliente}]]</th>
+                        <th>[[#{reserva.vehiculo}]]</th>
+                        <th>[[#{reserva.placa}]]</th>
+                        <th>[[#{reserva.estado}]]</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="r : ${reservas}">
+                        <td class="fw-semibold">[[${r.idReserva}]]</td>
+                        <td>[[${#temporals.format(r.fecha, 'dd/MM/yyyy')}]]</td>
+                        <td class="text-nowrap">[[${#temporals.format(r.horaInicio, 'HH:mm')}]] - [[${#temporals.format(r.horaFin, 'HH:mm')}]]</td>
+                        <td>[[${r.espacio.codigo}]]</td>
+                        <td>[[${r.cliente.nombre}]]</td>
+                        <td>[[${r.vehiculo.marca}]] [[${r.vehiculo.modelo}]]</td>
+                        <td class="fw-semibold">[[${r.vehiculo.placa}]]</td>
+                        <td>
+                            <span th:if="${r.estado == 'Confirmada'}" class="badge text-bg-success">[[#{reserva.confirmada}]]</span>
+                            <span th:if="${r.estado == 'Cancelada'}" class="badge text-bg-secondary">[[#{reserva.cancelada}]]</span>
+                        </td>
+                        <td class="text-end">
+                            <!-- Aqui va el boton "Cancelar" (HU-R05) -->
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center p-2" th:if="${reservas == null or reservas.empty}">
+            <span>[[#{lista.vacia}]]</span></div>
+    </div>
+</section>
