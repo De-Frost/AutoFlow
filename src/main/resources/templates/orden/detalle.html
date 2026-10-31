@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body><header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container af-hu16"><section class="af-tarjeta af-orden">
+<a class="af-volver" th:href="@{/orden/listado}">← Órdenes de servicio</a>
+<h1 th:text="${'Orden de servicio #OS-' + orden.idOrden}"></h1>
+<p>Estado actual: <span class="af-estado" th:classappend="${orden.estado == 'Finalizada' ? 'af-finalizada' : (orden.estado == 'En proceso' ? 'af-proceso' : 'af-pendiente')}"></span> <strong th:text="${orden.estado}"></strong></p>
+<div th:with="vehiculo=${orden.diagnostico.recepcion.vehiculo}">
+<h2>Información del cliente</h2><div class="af-datos"><span th:text="${vehiculo.cliente.nombre}"></span><span th:text="${'Identificación: ' + vehiculo.cliente.identificacion}"></span>
+<span th:text="${vehiculo.marca + ' ' + vehiculo.modelo}"></span><span th:text="${'Placa: ' + vehiculo.placa}"></span></div></div>
+<h2>Diagnóstico</h2><p class="af-multilinea" th:text="${orden.diagnostico.fallasEncontradas}"></p>
+<h2>Trabajo necesario</h2><p class="af-multilinea" th:text="${orden.diagnostico.trabajosNecesarios}"></p>
+<h2>Mecánico responsable</h2><p th:text="${orden.mecanico != null ? orden.mecanico.nombre : 'Sin asignar'}"></p>
+<div class="af-acciones"><a class="af-boton" th:if="${orden.estado != 'Finalizada'}" th:href="@{/orden/{id}/mecanicos(id=${orden.idOrden})}" th:text="${orden.mecanico != null ? 'Cambiar mecánico' : 'Asignar mecánico'}"></a>
+<a class="af-boton" th:href="@{/orden/{id}/estado(id=${orden.idOrden})}">Actualizar estado</a></div>
+</section></main><div class="container pb-3 af-ruta">Seguimiento</div>
+<footer th:replace="~{general/fragmentos :: footer}"></footer></body></html>
