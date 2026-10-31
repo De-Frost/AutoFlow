@@ -1,0 +1,156 @@
+<!-- Ordenes Finalizadas -->
+<section th:fragment="pendientes" class="container py-3">
+    <div class="af-tarjeta">
+        <h1 class="af-tarjeta-titulo h4 mb-3"><i class="fa-solid fa-file-invoice-dollar"></i> [[#{factura.pendientes}]]</h1>
+        <div th:if="${!pendientes.empty}" class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead><tr>
+                        <th>[[#{factura.orden}]]</th>
+                        <th>[[#{factura.cliente}]]</th>
+                        <th>[[#{factura.vehiculo}]]</th>
+                        <th>[[#{factura.finalizada}]]</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="o : ${pendientes}">
+                        <td>#[[${o.idOrden}]]</td>
+                        <td>[[${o.diagnostico.recepcion.vehiculo.cliente.nombre}]]</td>
+                        <td>[[${o.diagnostico.recepcion.vehiculo.placa}]] · [[${o.diagnostico.recepcion.vehiculo.marca}]] [[${o.diagnostico.recepcion.vehiculo.modelo}]]</td>
+                        <td>[[${#temporals.format(o.fechaEstado != null ? o.fechaEstado : o.fecha, 'dd/MM/yyyy HH:mm')}]]</td>
+                        <td class="text-end">
+                            <a th:href="@{/factura/generar/{id}(id=${o.idOrden})}" class="btn btn-success btn-sm">
+                                <i class="fa-solid fa-file-invoice"></i> [[#{factura.generar}]]</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center p-2" th:if="${pendientes.empty}"><span>[[#{factura.sinpendientes}]]</span></div>
+    </div>
+</section>
+
+<!-- Facturas Emitidas -->
+<section th:fragment="emitidas" class="container pb-3">
+    <div class="af-tarjeta">
+        <h2 class="af-tarjeta-titulo h5 mb-3"><i class="fa-solid fa-clock-rotate-left"></i> [[#{factura.emitidas}]]</h2>
+        <div th:if="${!facturas.empty}" class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead><tr>
+                        <th>[[#{factura.numero}]]</th>
+                        <th>[[#{factura.fecha}]]</th>
+                        <th>[[#{factura.orden}]]</th>
+                        <th>[[#{factura.cliente}]]</th>
+                        <th class="text-end">[[#{factura.total}]]</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="f : ${facturas}">
+                        <td>#[[${f.idFactura}]]</td>
+                        <td>[[${#temporals.format(f.fecha, 'dd/MM/yyyy HH:mm')}]]</td>
+                        <td>#[[${f.orden.idOrden}]]</td>
+                        <td>[[${f.orden.diagnostico.recepcion.vehiculo.cliente.nombre}]]</td>
+                        <td class="text-end">[[${#numbers.formatDecimal(f.total, 1, 'COMMA', 2, 'POINT')}]]</td>
+                        <td class="text-end">
+                            <a th:href="@{/factura/ver/{id}(id=${f.idFactura})}" class="btn btn-outline-primary btn-sm">
+                                <i class="fa-solid fa-eye"></i> [[#{factura.ver}]]</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center p-2" th:if="${facturas.empty}"><span>[[#{lista.vacia}]]</span></div>
+    </div>
+</section>
+
+<!-- La factura de una orden -->
+<section th:fragment="documento" class="container py-3">
+    <div class="af-tarjeta">
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+            <h1 class="af-tarjeta-titulo h4 m-0 me-auto">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+                <span th:if="${factura != null}">[[#{factura.titulo}]] #[[${factura.idFactura}]]</span>
+                <span th:if="${factura == null}">[[#{factura.previa}]]</span>
+            </h1>
+            <a th:href="@{/factura/pendientes}" class="btn btn-outline-primary d-print-none">
+                <i class="fa-solid fa-arrow-left"></i> [[#{factura.volver}]]</a>
+            <button th:if="${factura != null}" type="button" class="btn btn-outline-secondary d-print-none"
+                    onclick="window.print()"><i class="fa-solid fa-print"></i> [[#{factura.imprimir}]]</button>
+        </div>
+
+        <!-- Datos del cliente -->
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <strong>[[#{factura.cliente}]]:</strong> [[${orden.diagnostico.recepcion.vehiculo.cliente.nombre}]]<br/>
+                <strong>[[#{factura.identificacion}]]:</strong> [[${orden.diagnostico.recepcion.vehiculo.cliente.identificacion}]]<br/>
+                <strong>[[#{factura.vehiculo}]]:</strong> [[${orden.diagnostico.recepcion.vehiculo.placa}]] ·
+                [[${orden.diagnostico.recepcion.vehiculo.marca}]] [[${orden.diagnostico.recepcion.vehiculo.modelo}]]
+            </div>
+            <div class="col-md-6">
+                <strong>[[#{factura.orden}]]:</strong> #[[${orden.idOrden}]]<br/>
+                <strong>[[#{factura.fecha}]]:</strong>
+                <span th:if="${factura != null}">[[${#temporals.format(factura.fecha, 'dd/MM/yyyy HH:mm')}]]</span>
+                <span th:if="${factura == null}">[[${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy HH:mm')}]]</span>
+            </div>
+        </div>
+
+        <!-- Servicios-->
+        <h2 class="h6">[[#{factura.servicios}]]</h2>
+        <div class="table-responsive mb-3">
+            <table class="table align-middle">
+                <thead><tr>
+                        <th>[[#{factura.descripcion}]]</th>
+                        <th class="text-end">[[#{factura.cantidad}]]</th>
+                        <th class="text-end">[[#{factura.costo}]]</th>
+                        <th class="text-end">[[#{factura.importe}]]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="s : ${servicios}">
+                        <td>[[${s.descripcion}]]</td>
+                        <td class="text-end">[[${s.cantidad}]]</td>
+                        <td class="text-end">[[${#numbers.formatDecimal(s.costo, 1, 'COMMA', 2, 'POINT')}]]</td>
+                        <td class="text-end">[[${#numbers.formatDecimal(s.costo * s.cantidad, 1, 'COMMA', 2, 'POINT')}]]</td>
+                    </tr>
+                    <tr th:if="${servicios.empty}"><td colspan="4" class="text-center">[[#{factura.sinservicios}]]</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Repuestos consumidos -->
+        <h2 class="h6">[[#{factura.repuestos}]]</h2>
+        <div class="table-responsive mb-3">
+            <table class="table align-middle">
+                <thead><tr>
+                        <th>[[#{factura.repuesto}]]</th>
+                        <th class="text-end">[[#{factura.cantidad}]]</th>
+                        <th class="text-end">[[#{factura.precio}]]</th>
+                        <th class="text-end">[[#{factura.importe}]]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="r : ${repuestos}">
+                        <td>[[${r.repuesto.codigo}]] · [[${r.repuesto.nombre}]]</td>
+                        <td class="text-end">[[${r.cantidad}]]</td>
+                        <td class="text-end">[[${#numbers.formatDecimal(r.precioUnitario, 1, 'COMMA', 2, 'POINT')}]]</td>
+                        <td class="text-end">[[${#numbers.formatDecimal(r.precioUnitario * r.cantidad, 1, 'COMMA', 2, 'POINT')}]]</td>
+                    </tr>
+                    <tr th:if="${repuestos.empty}"><td colspan="4" class="text-center">[[#{factura.sinrepuestos}]]</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Total -->
+        <div class="d-flex justify-content-end align-items-center gap-3 mb-3">
+            <span class="h5 m-0">[[#{factura.total}]]</span>
+            <span class="badge text-bg-primary fs-5">[[${#numbers.formatDecimal(factura != null ? factura.total : total, 1, 'COMMA', 2, 'POINT')}]]</span>
+        </div>
+
+        <form th:if="${factura == null}" th:action="@{/factura/generar}" method="post" class="text-end d-print-none">
+            <input type="hidden" name="idOrden" th:value="${orden.idOrden}"/>
+            <button type="submit" class="btn btn-success">
+                <i class="fa-solid fa-check"></i> [[#{factura.confirmar}]]</button>
+        </form>
+    </div>
+</section>
