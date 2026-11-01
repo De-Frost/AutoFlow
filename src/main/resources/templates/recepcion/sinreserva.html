@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{general/fragmentos :: head}"></head>
+
+<body>
+
+<header th:replace="~{general/fragmentos :: header}"></header>
+
+<main class="container af-hu16">
+
+    <section class="af-tarjeta af-orden">
+
+        <h1>Recepción de vehículo sin reserva</h1>
+
+        <p>
+            Busque el vehículo por placa o por nombre del cliente
+            para registrar su llegada al taller.
+        </p>
+
+        <form th:action="@{/recepcion/sin-reserva}"
+              method="get"
+              class="mb-4">
+
+            <div class="mb-3">
+                <label for="busqueda" class="form-label">
+                    Placa o nombre del cliente
+                </label>
+
+                <input type="text"
+                       id="busqueda"
+                       name="busqueda"
+                       class="form-control"
+                       th:value="${busqueda}"
+                       placeholder="Ingrese la placa o el nombre">
+            </div>
+
+            <button type="submit" class="af-boton">
+                Buscar vehículo
+            </button>
+
+        </form>
+
+        <h3>Vehículos registrados</h3>
+
+        <div th:if="${#lists.isEmpty(vehiculos)}"
+             class="alert alert-info">
+            No se encontraron vehículos.
+        </div>
+
+        <div th:each="vehiculo : ${vehiculos}"
+             class="af-tarjeta mb-3">
+
+            <p>
+                <strong>Placa:</strong>
+                <span th:text="${vehiculo.placa}"></span>
+            </p>
+
+            <p>
+                <strong>Marca:</strong>
+                <span th:text="${vehiculo.marca}"></span>
+            </p>
+
+            <p>
+                <strong>Modelo:</strong>
+                <span th:text="${vehiculo.modelo}"></span>
+            </p>
+
+            <p>
+                <strong>Cliente:</strong>
+                <span th:text="${vehiculo.cliente.nombre}"></span>
+            </p>
+
+            <a th:href="@{/recepcion/sin-reserva/{id}(id=${vehiculo.idVehiculo})}"
+               class="af-boton">
+                Seleccionar vehículo
+            </a>
+
+        </div>
+
+        <div class="mt-4">
+            <a th:href="@{/recepcion}" class="af-boton">
+                Volver
+            </a>
+        </div>
+
+    </section>
+
+</main>
+
+<div class="container pb-3 af-ruta">
+    Recepción / Sin reserva
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{general/fragmentos :: head}"></head>
+
+<body>
+
+<header th:replace="~{general/fragmentos :: header}"></header>
+
+<main class="container af-hu16">
+
+    <section class="af-tarjeta af-orden">
+
+        <h1>Estado inicial del vehículo</h1>
+
+        <p>
+            Registre las condiciones de ingreso del vehículo
+            sin reserva previa.
+        </p>
+
+        <div th:if="${error}" class="alert alert-danger">
+            <span th:text="${error}"></span>
+        </div>
+
+        <h3 class="mt-4">Información del vehículo</h3>
+
+        <p>
+            <strong>Placa:</strong>
+            <span th:text="${vehiculo.placa}"></span>
+        </p>
+
+        <p>
+            <strong>Marca:</strong>
+            <span th:text="${vehiculo.marca}"></span>
+        </p>
+
+        <p>
+            <strong>Modelo:</strong>
+            <span th:text="${vehiculo.modelo}"></span>
+        </p>
+
+        <p>
+            <strong>Cliente:</strong>
+            <span th:text="${vehiculo.cliente.nombre}"></span>
+        </p>
+
+        <form th:action="@{/recepcion/guardar-sin-reserva/{id}(id=${vehiculo.idVehiculo})}"
+              th:object="${recepcion}"
+              method="post">
+
+            <div class="mb-3">
+                <label for="kilometraje" class="form-label">
+                    Kilometraje
+                </label>
+
+                <input type="number"
+                       id="kilometraje"
+                       th:field="*{kilometraje}"
+                       class="form-control"
+                       min="0"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label for="nivelCombustible" class="form-label">
+                    Nivel de combustible
+                </label>
+
+                <select id="nivelCombustible"
+                        th:field="*{nivelCombustible}"
+                        class="form-select"
+                        required>
+
+                    <option value="">Seleccione</option>
+                    <option value="Vacio">Vacío</option>
+                    <option value="1/4">1/4</option>
+                    <option value="1/2">1/2</option>
+                    <option value="3/4">3/4</option>
+                    <option value="Lleno">Lleno</option>
+
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="danosVisibles" class="form-label">
+                    Daños visibles
+                </label>
+
+                <textarea id="danosVisibles"
+                          th:field="*{danosVisibles}"
+                          class="form-control"
+                          maxlength="255"
+                          rows="3"
+                          placeholder="Describa los daños visibles"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="objetosPersonales" class="form-label">
+                    Objetos personales
+                </label>
+
+                <textarea id="objetosPersonales"
+                          th:field="*{objetosPersonales}"
+                          class="form-control"
+                          maxlength="255"
+                          rows="3"
+                          placeholder="Indique los objetos encontrados"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="fallaReportada" class="form-label">
+                    Falla reportada por el cliente
+                </label>
+
+                <textarea id="fallaReportada"
+                          th:field="*{fallaReportada}"
+                          class="form-control"
+                          maxlength="255"
+                          rows="3"
+                          required></textarea>
+            </div>
+
+            <div class="mt-4">
+
+                <button type="submit" class="af-boton">
+                    Guardar recepción
+                </button>
+
+                <a th:href="@{/recepcion/sin-reserva}"
+                   class="af-boton">
+                    Volver
+                </a>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+<div class="container pb-3 af-ruta">
+    Recepción / Sin reserva / Estado inicial
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+
+</body>
+</html>
