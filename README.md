@@ -41,3 +41,11 @@ Las pantallas usan los datos existentes de MySQL y no requieren cambios al esque
 Pruebas de las reglas de negocio: `mvn -Dtest=OrdenServicioServiceTests test`.
 
 El proyecto todavía no implementa autenticación ni autorización; el acceso exclusivo del administrador deberá conectarse cuando se incorpore el módulo de seguridad.
+
+## HU-R14: registrar diagnóstico
+
+Acceso: **Servicios → Diagnósticos** (`/diagnostico/listado`). Se muestran únicamente recepciones sin diagnóstico; la búsqueda admite placa o nombre del cliente, sin distinguir mayúsculas ni acentos. El botón **Siguiente** abre la recepción seleccionada.
+
+Registrar las fallas encontradas y los trabajos necesarios (obligatorios, máximo 10000 caracteres cada uno). El diagnóstico queda asociado a la recepción y registra la fecha. La restricción única existente en MySQL impide duplicados incluso ante solicitudes simultáneas. Al guardar se abre HU-R15 para generar la orden de servicio.
+
+No se requieren modificaciones del esquema. El autor mecánico queda sin asignar hasta integrar autenticación; no se atribuye el diagnóstico a un usuario ficticio. Pruebas: `mvn -Dtest=DiagnosticoServiceTests,GenerarOrdenServiceTests,OrdenServicioServiceTests test`.
