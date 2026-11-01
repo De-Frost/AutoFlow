@@ -12,6 +12,7 @@
 <h2>Diagnóstico</h2><p class="af-multilinea" th:text="${orden.diagnostico.fallasEncontradas}"></p>
 <h2>Trabajo necesario</h2><p class="af-multilinea" th:text="${orden.diagnostico.trabajosNecesarios}"></p>
 <h2>Mecánico responsable</h2><p th:text="${orden.mecanico != null ? orden.mecanico.nombre : 'Sin asignar'}"></p>
+<a th:href="@{/orden/{id}/servicios(id=${orden.idOrden})}">Ver servicios y subtotal</a>
 <div class="af-acciones"><a class="af-boton" th:if="${orden.estado != 'Finalizada'}" th:href="@{/orden/{id}/mecanicos(id=${orden.idOrden})}" th:text="${orden.mecanico != null ? 'Cambiar mecánico' : 'Asignar mecánico'}"></a>
 <a class="af-boton" th:href="@{/orden/{id}/estado(id=${orden.idOrden})}">Actualizar estado</a></div>
 </section></main><div class="container pb-3 af-ruta">Seguimiento</div>

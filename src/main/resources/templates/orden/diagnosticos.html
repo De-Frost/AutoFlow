@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body><header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container af-hu16"><section class="af-tarjeta af-orden"><h1>Generar orden de servicio</h1>
+<p>Seleccione un diagnóstico pendiente de generar orden.</p>
+<p th:if="${#lists.isEmpty(diagnosticos)}">No hay diagnósticos pendientes de generar orden.</p>
+<article class="af-mecanico" th:each="d : ${diagnosticos}">
+<div><strong th:text="${d.recepcion.vehiculo.cliente.nombre}"></strong><p th:text="${d.recepcion.vehiculo.placa}"></p></div>
+<a class="af-seleccionar" th:href="@{/orden/generar/{id}(id=${d.idDiagnostico})}">Seleccionar</a></article>
+<a th:href="@{/orden/listado}">← Órdenes de servicio</a></section></main><div class="container pb-3 af-ruta">Órdenes / Servicios</div>
+<footer th:replace="~{general/fragmentos :: footer}"></footer></body></html>

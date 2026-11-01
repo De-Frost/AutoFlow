@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body><header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container af-hu16"><section class="af-tarjeta af-orden"><h1>SERVICIOS A REALIZAR</h1>
+<p th:text="${'Orden OS-' + orden.idOrden}"></p>
+<div class="table-responsive"><table class="table af-tabla-servicios">
+<thead><tr><th>Servicio</th><th>Cantidad</th><th>Costo unitario</th><th>Importe</th></tr></thead>
+<tbody><tr th:each="s : ${servicios}"><td><span class="af-servicio-nombre" th:text="${s.descripcion}"></span></td>
+<td th:text="${s.cantidad}"></td><td th:text="${#numbers.formatDecimal(s.costo, 1, 'COMMA', 2, 'POINT')}"></td>
+<td th:text="${#numbers.formatDecimal(s.costo * s.cantidad, 1, 'COMMA', 2, 'POINT')}"></td></tr></tbody></table></div>
+<p class="text-end fw-bold" th:text="${'Subtotal: ' + #numbers.formatDecimal(subtotal, 1, 'COMMA', 2, 'POINT')}"></p>
+<div class="af-acciones"><a th:href="@{/orden/{id}(id=${orden.idOrden})}">Ver orden</a>
+<a class="af-boton" th:href="@{/orden/{id}/mecanicos(id=${orden.idOrden})}">Asignar mecánico</a></div></section></main><div class="container pb-3 af-ruta">Órdenes / Servicios</div>
+<footer th:replace="~{general/fragmentos :: footer}"></footer></body></html>
