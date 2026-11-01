@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import com.autoflow.domain.Vehiculo;
+import com.autoflow.repository.VehiculoRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +20,7 @@ public class RecepcionService {
 
     private final ReservaRepository reservaRepository;
     private final RecepcionRepository recepcionRepository;
+    private final VehiculoRepository vehiculoRepository;
 
     // Buscar reservas pendientes de recepción
     public List<Reserva> buscarReservas(String busqueda) {
@@ -29,11 +32,11 @@ public class RecepcionService {
     // Obtener una reserva existente
     public Reserva obtenerReserva(Integer idReserva) {
         return reservaRepository.findById(idReserva)
-                .orElseThrow(() ->
-                    new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "La reserva no existe"
-                    )
+                .orElseThrow(()
+                        -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "La reserva no existe"
+                        )
                 );
     }
 
@@ -44,13 +47,13 @@ public class RecepcionService {
 
         if (!"Confirmada".equals(reserva.getEstado())) {
             throw new IllegalArgumentException(
-                "La reserva no está confirmada"
+                    "La reserva no está confirmada"
             );
         }
 
         if (recepcionRepository.existsByReservaIdReserva(idReserva)) {
             throw new IllegalArgumentException(
-                "Esta reserva ya tiene una recepción registrada"
+                    "Esta reserva ya tiene una recepción registrada"
             );
         }
 
@@ -68,6 +71,35 @@ public class RecepcionService {
         recepcion.setIdRecepcion(null);
         recepcion.setReserva(reserva);
         recepcion.setVehiculo(reserva.getVehiculo());
+
+        return recepcionRepository.save(recepcion);
+    }
+
+    public List<Vehiculo> buscarVehiculos(String busqueda) {
+
+        String texto = busqueda == null ? "" : busqueda.trim();
+
+        return vehiculoRepository
+                .findByPlacaContainingIgnoreCaseOrClienteNombreContainingIgnoreCaseOrderByPlacaAsc(
+                        texto, texto);
+    }
+
+    public Vehiculo obtenerVehiculo(Integer idVehiculo) {
+
+        return vehiculoRepository.findById(idVehiculo)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "El vehículo no existe"));
+    }
+
+    @Transactional
+    public Recepcion registrarSinReserva(Integer idVehiculo, Recepcion recepcion) {
+
+        Vehiculo vehiculo = obtenerVehiculo(idVehiculo);
+
+        recepcion.setIdRecepcion(null);
+        recepcion.setVehiculo(vehiculo);
+        recepcion.setReserva(null);
 
         return recepcionRepository.save(recepcion);
     }
