@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{general/fragmentos :: head}"></head>
+
+<body>
+
+<header th:replace="~{general/fragmentos :: header}"></header>
+
+<main class="container af-hu16">
+
+    <section class="af-tarjeta af-orden">
+
+        <h1>Recepción con reserva</h1>
+
+        <p>Buscar reserva del vehículo</p>
+
+        <form th:action="@{/recepcion/con-reserva}" method="get">
+
+            <div class="mb-3">
+                <label class="form-label">
+                    Nombre del cliente o placa
+                </label>
+
+                <input type="text"
+                       name="busqueda"
+                       class="form-control"
+                       th:value="${busqueda}"
+                       placeholder="Ingrese nombre o placa">
+            </div>
+
+            <button type="submit" class="af-boton">
+                Buscar reserva
+            </button>
+
+        </form>
+
+        <h3 class="mt-4">Reservas encontradas</h3>
+
+        <p th:if="${#lists.isEmpty(reservas)}">
+            No se encontraron reservas pendientes.
+        </p>
+
+        <article class="af-mecanico"
+                 th:each="reserva : ${reservas}">
+
+            <div>
+                <strong th:text="${'Reserva #' + reserva.idReserva}">
+                </strong>
+
+                <p th:text="${reserva.cliente.nombre}">
+                </p>
+
+                <p th:text="${'Placa: ' + reserva.vehiculo.placa}">
+                </p>
+
+                <small th:text="${'Fecha: ' + reserva.fecha}">
+                </small>
+            </div>
+
+            <a class="af-seleccionar"
+               th:href="@{/recepcion/con-reserva/{id}(id=${reserva.idReserva})}">
+                Seleccionar
+            </a>
+
+        </article>
+
+        <div class="mt-4">
+            <a th:href="@{/recepcion}">
+                Volver a recepción
+            </a>
+        </div>
+
+    </section>
+
+</main>
+
+<div class="container pb-3 af-ruta">
+    Recepción / Con reserva
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+
+</body>
+</html>

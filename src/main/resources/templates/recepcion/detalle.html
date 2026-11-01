@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+    <body>
+
+        <header th:replace="~{general/fragmentos :: header}"></header>
+
+        <main class="container af-hu16">
+
+            <section class="af-tarjeta af-orden">
+
+                <h1>Detalle de la reserva</h1>
+
+                <div th:if="${error}" class="alert alert-danger">
+                    <span th:text="${error}"></span>
+                </div>
+
+                <p>Verifique los datos antes de registrar la llegada.</p>
+
+                <h3 class="mt-4">Información de la reserva</h3>
+
+                <p>
+                    <strong>Número de reserva:</strong>
+                    <span th:text="${reserva.idReserva}"></span>
+                </p>
+
+                <p>
+                    <strong>Estado:</strong>
+                    <span th:text="${reserva.estado}"></span>
+                </p>
+
+                <p>
+                    <strong>Fecha:</strong>
+                    <span th:text="${reserva.fecha}"></span>
+                </p>
+
+                <p>
+                    <strong>Horario:</strong>
+                    <span th:text="${reserva.horaInicio}"></span>
+                    -
+                    <span th:text="${reserva.horaFin}"></span>
+                </p>
+
+                <h3 class="mt-4">Datos del cliente</h3>
+
+                <p>
+                    <strong>Nombre:</strong>
+                    <span th:text="${reserva.cliente.nombre}"></span>
+                </p>
+
+                <h3 class="mt-4">Datos del vehículo</h3>
+
+                <p>
+                    <strong>Marca:</strong>
+                    <span th:text="${reserva.vehiculo.marca}"></span>
+                </p>
+
+                <p>
+                    <strong>Modelo:</strong>
+                    <span th:text="${reserva.vehiculo.modelo}"></span>
+                </p>
+
+                <p>
+                    <strong>Placa:</strong>
+                    <span th:text="${reserva.vehiculo.placa}"></span>
+                </p>
+
+                <p>
+                    <strong>Año:</strong>
+                    <span th:text="${reserva.vehiculo.anio}"></span>
+                </p>
+
+                <h3 class="mt-4">Información del servicio</h3>
+
+                <p>
+                    <strong>Motivo:</strong>
+                    <span th:text="${reserva.motivo}"></span>
+                </p>
+
+                <p>
+                    <strong>Espacio asignado:</strong>
+                    <span th:text="${reserva.espacio.nombre}"></span>
+                </p>
+
+                <div class="mt-4">
+
+                    <a th:href="@{/recepcion/estado-inicial/{id}(id=${reserva.idReserva})}"
+                       class="af-boton">
+                        Confirmar llegada
+                    </a>
+
+                    <a th:href="@{/recepcion/con-reserva}"
+                       class="af-boton">
+                        Volver a reservas
+                    </a>
+
+                </div>
+
+            </section>
+
+        </main>
+
+        <div class="container pb-3 af-ruta">
+            Recepción / Con reserva / Detalle
+        </div>
+
+        <footer th:replace="~{general/fragmentos :: footer}"></footer>
+
+    </body>
+</html>
