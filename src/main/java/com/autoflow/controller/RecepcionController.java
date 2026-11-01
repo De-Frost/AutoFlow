@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import com.autoflow.domain.Recepcion;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.autoflow.domain.Vehiculo;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 
 @Controller
 @RequiredArgsConstructor
@@ -72,25 +74,29 @@ public class RecepcionController {
     @PostMapping("/guardar-con-reserva/{idReserva}")
     public String guardarConReserva(
             @PathVariable Integer idReserva,
-            @ModelAttribute Recepcion recepcion,
+            @Valid @ModelAttribute("recepcion") Recepcion recepcion,
+            BindingResult resultado,
+            Model model,
             RedirectAttributes redirectAttributes) {
+
+        if (resultado.hasErrors()) {
+            model.addAttribute("reserva",
+                    recepcionService.obtenerReserva(idReserva));
+
+            return "recepcion/estado-inicial";
+        }
 
         try {
             recepcionService.registrarConReserva(idReserva, recepcion);
 
             redirectAttributes.addFlashAttribute(
                     "mensaje",
-                    "La llegada del vehículo se registró correctamente"
-            );
+                    "La llegada del vehículo se registró correctamente");
 
             return "redirect:/recepcion";
 
         } catch (IllegalArgumentException e) {
-
-            redirectAttributes.addFlashAttribute(
-                    "error",
-                    e.getMessage()
-            );
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
 
             return "redirect:/recepcion/con-reserva/" + idReserva;
         }
@@ -124,10 +130,21 @@ public class RecepcionController {
     @PostMapping("/guardar-sin-reserva/{idVehiculo}")
     public String guardarSinReserva(
             @PathVariable Integer idVehiculo,
-            @ModelAttribute Recepcion recepcion,
+            @Valid @ModelAttribute("recepcion") Recepcion recepcion,
+            BindingResult resultado,
+            Model model,
             RedirectAttributes redirectAttributes) {
 
+        if (resultado.hasErrors()) {
+
+            model.addAttribute("vehiculo",
+                    recepcionService.obtenerVehiculo(idVehiculo));
+
+            return "recepcion/estado-inicial-sin-reserva";
+        }
+
         try {
+
             recepcionService.registrarSinReserva(idVehiculo, recepcion);
 
             redirectAttributes.addFlashAttribute(

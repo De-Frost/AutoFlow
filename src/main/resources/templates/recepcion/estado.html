@@ -13,7 +13,9 @@
 
                 <h1>Estado inicial del vehículo</h1>
 
-                <p>Registre las condiciones de ingreso del vehículo.</p>
+                <p>
+                    Registre las condiciones de ingreso del vehículo.
+                </p>
 
                 <div th:if="${error}" class="alert alert-danger">
                     <span th:text="${error}"></span>
@@ -35,7 +37,9 @@
                       th:object="${recepcion}"
                       method="post">
 
+                    <!-- Kilometraje -->
                     <div class="mb-3">
+
                         <label for="kilometraje" class="form-label">
                             Kilometraje
                         </label>
@@ -46,9 +50,17 @@
                                class="form-control"
                                min="0"
                                required>
+
+                        <div class="text-danger"
+                             th:if="${#fields.hasErrors('kilometraje')}"
+                             th:errors="*{kilometraje}">
+                        </div>
+
                     </div>
 
+                    <!-- Nivel de combustible -->
                     <div class="mb-3">
+
                         <label for="nivelCombustible" class="form-label">
                             Nivel de combustible
                         </label>
@@ -66,9 +78,17 @@
                             <option value="Lleno">Lleno</option>
 
                         </select>
+
+                        <div class="text-danger"
+                             th:if="${#fields.hasErrors('nivelCombustible')}"
+                             th:errors="*{nivelCombustible}">
+                        </div>
+
                     </div>
 
+                    <!-- Daños visibles -->
                     <div class="mb-3">
+
                         <label for="danosVisibles" class="form-label">
                             Daños visibles
                         </label>
@@ -79,9 +99,17 @@
                                   maxlength="255"
                                   rows="3"
                                   placeholder="Describa los daños visibles"></textarea>
+
+                        <div class="text-danger"
+                             th:if="${#fields.hasErrors('danosVisibles')}"
+                             th:errors="*{danosVisibles}">
+                        </div>
+
                     </div>
 
+                    <!-- Objetos personales -->
                     <div class="mb-3">
+
                         <label for="objetosPersonales" class="form-label">
                             Objetos personales
                         </label>
@@ -92,9 +120,17 @@
                                   maxlength="255"
                                   rows="3"
                                   placeholder="Indique los objetos encontrados"></textarea>
+
+                        <div class="text-danger"
+                             th:if="${#fields.hasErrors('objetosPersonales')}"
+                             th:errors="*{objetosPersonales}">
+                        </div>
+
                     </div>
 
+                    <!-- Falla reportada -->
                     <div class="mb-3">
+
                         <label for="fallaReportada" class="form-label">
                             Falla reportada por el cliente
                         </label>
@@ -105,8 +141,15 @@
                                   maxlength="255"
                                   rows="3"
                                   required></textarea>
+
+                        <div class="text-danger"
+                             th:if="${#fields.hasErrors('fallaReportada')}"
+                             th:errors="*{fallaReportada}">
+                        </div>
+
                     </div>
 
+                    <!-- Botones -->
                     <div class="mt-4">
 
                         <button type="submit" class="af-boton">
