@@ -19,13 +19,13 @@ public class RecepcionController {
 
     private final RecepcionService recepcionService;
 
-    // Pantalla principal de recepción
-    @GetMapping
+    //Pantalla principal de recepcion
+    @GetMapping("/listado")
     public String inicio() {
         return "recepcion/inicio";
     }
 
-    // Buscar reservas confirmadas
+    //Buscar reservas confirmadas
     @GetMapping("/con-reserva")
     public String buscarReservas(
             @RequestParam(
@@ -41,34 +41,42 @@ public class RecepcionController {
                 recepcionService.buscarReservas(busqueda)
         );
 
-        return "recepcion/con-reserva";
+        return "recepcion/conreserva";
     }
 
-    // Mostrar los datos de una reserva seleccionada
+    //Mostrar los datos de una reserva seleccionada
     @GetMapping("/con-reserva/{idReserva}")
     public String detalleReserva(
             @PathVariable Integer idReserva,
-            Model model) {
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
-        Reserva reserva
-                = recepcionService.validarLlegada(idReserva);
-
-        model.addAttribute("reserva", reserva);
-
-        return "recepcion/detalle-reserva";
+        try {
+            Reserva reserva = recepcionService.validarLlegada(idReserva);
+            model.addAttribute("reserva", reserva);
+            return "recepcion/detalle";
+        } catch (IllegalArgumentException e) {
+            // Reserva cancelada o que ya fue recibida: se vuelve a la busqueda con el aviso
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/recepcion/con-reserva";
+        }
     }
 
     @GetMapping("/estado-inicial/{idReserva}")
     public String estadoInicial(
             @PathVariable Integer idReserva,
-            Model model) {
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
-        Reserva reserva = recepcionService.validarLlegada(idReserva);
-
-        model.addAttribute("reserva", reserva);
-        model.addAttribute("recepcion", new Recepcion());
-
-        return "recepcion/estado-inicial";
+        try {
+            Reserva reserva = recepcionService.validarLlegada(idReserva);
+            model.addAttribute("reserva", reserva);
+            model.addAttribute("recepcion", new Recepcion());
+            return "recepcion/estado";
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/recepcion/con-reserva";
+        }
     }
 
     @PostMapping("/guardar-con-reserva/{idReserva}")
@@ -83,17 +91,17 @@ public class RecepcionController {
             model.addAttribute("reserva",
                     recepcionService.obtenerReserva(idReserva));
 
-            return "recepcion/estado-inicial";
+            return "recepcion/estado";
         }
 
         try {
             recepcionService.registrarConReserva(idReserva, recepcion);
 
             redirectAttributes.addFlashAttribute(
-                    "mensaje",
+                    "todoOk",
                     "La llegada del vehículo se registró correctamente");
 
-            return "redirect:/recepcion";
+            return "redirect:/recepcion/listado";
 
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
@@ -111,7 +119,7 @@ public class RecepcionController {
         model.addAttribute("vehiculos",
                 recepcionService.buscarVehiculos(busqueda));
 
-        return "recepcion/sin-reserva";
+        return "recepcion/sinreserva";
     }
 
     @GetMapping("/sin-reserva/{idVehiculo}")
@@ -124,7 +132,7 @@ public class RecepcionController {
         model.addAttribute("vehiculo", vehiculo);
         model.addAttribute("recepcion", new Recepcion());
 
-        return "recepcion/estado-inicial-sin-reserva";
+        return "recepcion/inicialsinreserva";
     }
 
     @PostMapping("/guardar-sin-reserva/{idVehiculo}")
@@ -140,7 +148,7 @@ public class RecepcionController {
             model.addAttribute("vehiculo",
                     recepcionService.obtenerVehiculo(idVehiculo));
 
-            return "recepcion/estado-inicial-sin-reserva";
+            return "recepcion/inicialsinreserva";
         }
 
         try {
@@ -148,10 +156,10 @@ public class RecepcionController {
             recepcionService.registrarSinReserva(idVehiculo, recepcion);
 
             redirectAttributes.addFlashAttribute(
-                    "mensaje",
+                    "todoOk",
                     "La llegada del vehículo sin reserva se registró correctamente");
 
-            return "redirect:/recepcion";
+            return "redirect:/recepcion/listado";
 
         } catch (IllegalArgumentException e) {
 
