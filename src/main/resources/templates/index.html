@@ -5,9 +5,9 @@
     <body>
         <header th:replace="~{general/fragmentos :: header}"/>
 
-        <main class="container py-4">
+        <main class="container py-5">
             <!-- Menu principal -->
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 g-lg-4">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4 g-lg-5">
                 <div class="col"><a th:href="@{/servicios}" class="af-pill">[[#{plantilla.servicios}]]</a></div>
                 <div class="col"><a th:href="@{/reserva/listado}" class="af-pill">[[#{plantilla.reservas}]]</a></div>
                 <div class="col"><a th:href="@{/recepcion/listado}" class="af-pill">[[#{plantilla.recepcion}]]</a></div>
