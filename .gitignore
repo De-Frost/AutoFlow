@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Archivos de error de Java y NetBeans ###
+hs_err_pid*.log
+replay_pid*.log
+nbactions.xml
