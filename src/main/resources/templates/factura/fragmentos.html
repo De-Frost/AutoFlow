@@ -1,7 +1,7 @@
 <!-- Ordenes Finalizadas -->
 <section th:fragment="pendientes" class="container py-3">
     <div class="af-tarjeta">
-        <h1 class="af-tarjeta-titulo h4 mb-3"><i class="fa-solid fa-file-invoice-dollar"></i> [[#{factura.pendientes}]]</h1>
+        <h1 class="af-tarjeta-titulo h4 mb-3">[[#{factura.pendientes}]]</h1>
         <div th:if="${!pendientes.empty}" class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead><tr>
@@ -33,7 +33,7 @@
 <!-- Facturas Emitidas -->
 <section th:fragment="emitidas" class="container pb-3">
     <div class="af-tarjeta">
-        <h2 class="af-tarjeta-titulo h5 mb-3"><i class="fa-solid fa-clock-rotate-left"></i> [[#{factura.emitidas}]]</h2>
+        <h2 class="af-tarjeta-titulo h5 mb-3">[[#{factura.emitidas}]]</h2>
         <div th:if="${!facturas.empty}" class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead><tr>
@@ -69,7 +69,6 @@
     <div class="af-tarjeta">
         <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
             <h1 class="af-tarjeta-titulo h4 m-0 me-auto">
-                <i class="fa-solid fa-file-invoice-dollar"></i>
                 <span th:if="${factura != null}">[[#{factura.titulo}]] #[[${factura.idFactura}]]</span>
                 <span th:if="${factura == null}">[[#{factura.previa}]]</span>
             </h1>
