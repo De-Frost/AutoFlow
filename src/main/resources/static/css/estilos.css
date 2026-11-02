@@ -121,7 +121,7 @@ main {
 .af-pill {
     display: block;
     width: 100%;
-    padding: .65rem 1rem;
+    padding: .9rem 1rem;
     border-radius: 50rem;
     background: #fff;
     color: var(--af-azul);
