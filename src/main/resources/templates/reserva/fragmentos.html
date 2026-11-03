@@ -6,7 +6,9 @@
                 <i class="fa-solid fa-calendar-days"></i> [[#{reserva.listado}]]
                 <span class="badge text-bg-primary">[[${totalReservas}]]</span>
             </h1>
-            <!-- Aqui va el boton "Registrar reserva" (HU-R03) -->
+            <button type="button" class="btn btn-primary"
+                    data-bs-toggle="modal" data-bs-target="#agregarReservaModal">
+                <i class="fa-solid fa-plus"></i> [[#{reserva.agregar}]]</button>
         </div>
 
         <!-- Filtros -->
@@ -60,10 +62,15 @@
                         <td class="fw-semibold">[[${r.vehiculo.placa}]]</td>
                         <td>
                             <span th:if="${r.estado == 'Confirmada'}" class="badge text-bg-success">[[#{reserva.confirmada}]]</span>
-                            <span th:if="${r.estado == 'Cancelada'}" class="badge text-bg-secondary">[[#{reserva.cancelada}]]</span>
+                            <span th:if="${r.estado == 'Cancelada'}" class="badge text-bg-secondary"
+                                  th:title="${r.motivoCancelacion}">[[#{reserva.cancelada}]]</span>
                         </td>
                         <td class="text-end">
-                            <!-- Aqui va el boton "Cancelar" (HU-R05) -->
+                            <button th:if="${r.estado == 'Confirmada'}" type="button" class="btn btn-danger btn-sm"
+                                    data-bs-toggle="modal" data-bs-target="#confirmModal"
+                                    th:data-bs-id="${r.idReserva}"
+                                    th:data-bs-descripcion="'#' + ${r.idReserva} + ' - ' + ${r.vehiculo.placa}">
+                                <i class="fa-solid fa-ban"></i> [[#{reserva.cancelar}]]</button>
                         </td>
                     </tr>
                 </tbody>
@@ -71,5 +78,91 @@
         </div>
         <div class="text-center p-2" th:if="${reservas == null or reservas.empty}">
             <span>[[#{lista.vacia}]]</span></div>
+    </div>
+</section>
+
+<!-- HU-R03: Ventana para registrar una reserva -->
+<section th:fragment="agregar">
+    <div class="modal fade" id="agregarReservaModal" tabindex="-1"
+         aria-labelledby="agregarReservaLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h2 class="modal-title fs-5" id="agregarReservaLabel">
+                        <i class="fa-solid fa-calendar-plus"></i> [[#{reserva.agregar}]]</h2>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/reserva/guardar}" method="post" class="was-validated">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="vehiculo" class="form-label">[[#{reserva.vehiculo}]]</label>
+                            <select id="vehiculo" name="vehiculo.idVehiculo" class="form-select" required="true">
+                                <option value="">[[#{reserva.seleccione}]]</option>
+                                <option th:each="v : ${vehiculos}" th:value="${v.idVehiculo}">
+                                    [[${v.placa}]] - [[${v.marca}]] [[${v.modelo}]] ([[${v.cliente.nombre}]])</option>
+                            </select></div>
+                        <div class="mb-3">
+                            <label for="espacio" class="form-label">[[#{reserva.espacio}]]</label>
+                            <select id="espacio" name="espacio.idEspacio" class="form-select" required="true">
+                                <option value="">[[#{reserva.seleccione}]]</option>
+                                <option th:each="e : ${espacios}" th:value="${e.idEspacio}">
+                                    [[${e.codigo}]] - [[${e.nombre}]]</option>
+                            </select></div>
+                        <div class="mb-3">
+                            <label for="fechaReserva" class="form-label">[[#{reserva.fecha}]]</label>
+                            <input type="date" id="fechaReserva" name="fecha" class="form-control"
+                                   th:min="${#temporals.createToday()}" required="true"/></div>
+                        <div class="row">
+                            <div class="col-sm-6 mb-3">
+                                <label for="horaInicio" class="form-label">[[#{reserva.horaInicio}]]</label>
+                                <input type="time" id="horaInicio" name="horaInicio" class="form-control" required="true"/></div>
+                            <div class="col-sm-6 mb-3">
+                                <label for="horaFin" class="form-label">[[#{reserva.horaFin}]]</label>
+                                <input type="time" id="horaFin" name="horaFin" class="form-control" required="true"/></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="motivo" class="form-label">[[#{reserva.motivo}]]</label>
+                            <input type="text" id="motivo" name="motivo" class="form-control"
+                                   maxlength="255" required="true"/></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-floppy-disk"></i> [[#{reserva.agregar}]]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HU-R05: Ventana para cancelar una reserva indicando el motivo -->
+<section th:fragment="cancelar">
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="cancelarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form th:action="@{/reserva/cancelar}" method="post" class="was-validated">
+                    <input type="hidden" name="idReserva" id="modalId"/>
+                    <div class="modal-header bg-warning">
+                        <h2 class="modal-title fs-5" id="cancelarLabel">
+                            <i class="fa-solid fa-triangle-exclamation"></i> [[#{reserva.cancelar.titulo}]]</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>[[#{reserva.cancelar.pregunta}]] <strong id="modalDescripcion"></strong></p>
+                        <label for="motivoCancelacion" class="form-label">[[#{reserva.motivoCancelacion}]]</label>
+                        <textarea id="motivoCancelacion" name="motivoCancelacion" class="form-control"
+                                  rows="3" maxlength="255" required="true"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fa-solid fa-ban"></i> [[#{reserva.cancelar.confirmar}]]</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </section>

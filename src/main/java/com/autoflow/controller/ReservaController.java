@@ -1,15 +1,21 @@
 package com.autoflow.controller;
 
+import com.autoflow.domain.Reserva;
 import com.autoflow.service.ReservaService;
+import jakarta.validation.Valid;
 import java.time.LocalDate;
+import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -17,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ReservaController {
 
     private final ReservaService reservaService;
-    private final MessageSource messageSource; //Se usa en HU-R03 y HU-R05
+    private final MessageSource messageSource;
 
     @GetMapping("/listado")
     public String listado(
@@ -32,6 +38,47 @@ public class ReservaController {
         model.addAttribute("fecha", fecha);
         model.addAttribute("estado", estado);
         model.addAttribute("placa", placa);
+        //Listas para el modal de nueva reserva (HU-R03)
+        model.addAttribute("vehiculos", reservaService.getVehiculos());
+        model.addAttribute("espacios", reservaService.getEspaciosActivos());
         return "reserva/listado";
+    }
+
+    //HU-R03: Registrar reserva
+    @PostMapping("/guardar")
+    public String guardar(@Valid Reserva reserva, BindingResult bindingResult,
+            RedirectAttributes redirectAttributes, Locale locale) {
+        String titulo = "todoOk";
+        String mensaje = "reserva.exito";
+        if (bindingResult.hasErrors()) {
+            titulo = "error";
+            mensaje = "reserva.error01";
+        } else {
+            try {
+                reservaService.registrar(reserva);
+            } catch (IllegalArgumentException e) {
+                titulo = "error";
+                mensaje = e.getMessage(); //La llave que puso el servicio
+            }
+        }
+        redirectAttributes.addFlashAttribute(titulo, messageSource.getMessage(mensaje, null, locale));
+        return "redirect:/reserva/listado";
+    }
+
+    //HU-R05: Cancelar reserva
+    @PostMapping("/cancelar")
+    public String cancelar(@RequestParam Integer idReserva,
+            @RequestParam(value = "motivoCancelacion", required = false) String motivoCancelacion,
+            RedirectAttributes redirectAttributes, Locale locale) {
+        String titulo = "todoOk";
+        String mensaje = "reserva.exitoCancelar";
+        try {
+            reservaService.cancelar(idReserva, motivoCancelacion);
+        } catch (IllegalArgumentException e) {
+            titulo = "error";
+            mensaje = e.getMessage();
+        }
+        redirectAttributes.addFlashAttribute(titulo, messageSource.getMessage(mensaje, null, locale));
+        return "redirect:/reserva/listado";
     }
 }
