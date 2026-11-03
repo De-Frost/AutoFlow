@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body><header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container af-hu16"><section class="af-tarjeta af-orden">
+<h1 role="status">Mecánico asignado correctamente.</h1>
+<div class="af-confirmacion"><strong th:text="${orden.mecanico.nombre}"></strong><p th:text="${carga + ' órdenes asignadas'}"></p><p th:text="${'Orden: OS-' + orden.idOrden}"></p></div>
+<a th:href="@{/orden/{id}(id=${orden.idOrden})}">Ver seguimiento de la orden →</a>
+</section></main><div class="container pb-3 af-ruta">Mecánicos / Servicios</div>
+<footer th:replace="~{general/fragmentos :: footer}"></footer></body></html>

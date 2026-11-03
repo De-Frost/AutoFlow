@@ -22,4 +22,14 @@ public interface ReservaRepository extends JpaRepository<Reserva, Integer> {
     public boolean existeConflicto(@Param("idEspacio") Integer idEspacio, @Param("fecha") LocalDate fecha,
             @Param("horaInicio") LocalTime horaInicio, @Param("horaFin") LocalTime horaFin,
             @Param("idReserva") Integer idReserva);
+
+    @Query("SELECT r FROM Reserva r "
+            + "WHERE r.estado = 'Confirmada' "
+            + "AND NOT EXISTS "
+            + "(SELECT rec FROM Recepcion rec WHERE rec.reserva = r) "
+            + "AND (LOWER(r.cliente.nombre) LIKE LOWER(CONCAT('%', :busqueda, '%')) "
+            + "OR LOWER(r.vehiculo.placa) LIKE LOWER(CONCAT('%', :busqueda, '%'))) "
+            + "ORDER BY r.fecha ASC, r.horaInicio ASC")
+    public List<Reserva> buscarReservasPendientes(
+            @Param("busqueda") String busqueda);
 }

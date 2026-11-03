@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+    <body>
+
+        <header th:replace="~{general/fragmentos :: header}"></header>
+
+        <main class="container af-hu16">
+
+            <section class="af-tarjeta af-orden">
+
+
+                <h1 class="text-center">
+                    Recepción de vehículos
+                </h1>
+
+                <p class="text-center">
+                    Seleccione el tipo de recepción que desea realizar.
+                </p>
+
+                <div class="d-grid gap-3 mt-4">
+
+                    <a th:href="@{/recepcion/con-reserva}"
+                       class="af-boton py-3">
+
+                        Con reserva
+
+                    </a>
+
+                    <a th:href="@{/recepcion/sin-reserva}"
+                       class="af-boton py-3">
+
+                        Sin reserva
+
+                    </a>
+
+                </div>
+
+                <div class="mt-4 text-center">
+
+                    <a th:href="@{/servicios}">
+                        <i class="fa-solid fa-arrow-left me-2"></i>
+                        Volver a servicios
+                    </a>
+
+                </div>
+
+            </section>
+
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: footer}"></footer>
+
+    </body>
+</html>

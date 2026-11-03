@@ -29,3 +29,23 @@ AutoFlow reúne en una sola aplicación web las actividades de un taller automot
 4.	Al terminar la tarea se abre un pull request hacia main. Mientras otro integrante revisa y aprueba el pull request.
 5.	Los conflictos se resuelven en la rama de trabajo y no en main.
 6.	Las tareas pendientes se registran como issues en GitHub, con prioridad alta, media o baja.
+
+## 4. HU16: asignar mecánico a la orden
+
+Ingresar a **Servicios → Órdenes de servicio** (también desde **Mecánicos** o **Seguimiento**). Abrir una orden, pulsar **Asignar mecánico**, seleccionar un mecánico activo y revisar la confirmación. La carga mostrada corresponde a las órdenes no finalizadas y se vuelve a consultar después de asignar.
+
+Desde el detalle se puede cambiar el responsable y actualizar el estado a **Pendiente**, **En proceso** o **Finalizada**. El cambio de estado registra su fecha; iniciar o finalizar requiere un responsable. Las órdenes finalizadas no permiten cambiar el mecánico.
+
+Las pantallas usan los datos existentes de MySQL y no requieren cambios al esquema ni ejecutar nuevamente el script de creación. Para probar con los datos del script, abrir `/orden/1`, que ya cuenta con diagnóstico, cliente y vehículo.
+
+Pruebas de las reglas de negocio: `mvn -Dtest=OrdenServicioServiceTests test`.
+
+El proyecto todavía no implementa autenticación ni autorización; el acceso exclusivo del administrador deberá conectarse cuando se incorpore el módulo de seguridad.
+
+## HU-R14: registrar diagnóstico
+
+Acceso: **Servicios → Diagnósticos** (`/diagnostico/listado`). Se muestran únicamente recepciones sin diagnóstico; la búsqueda admite placa o nombre del cliente, sin distinguir mayúsculas ni acentos. El botón **Siguiente** abre la recepción seleccionada.
+
+Registrar las fallas encontradas y los trabajos necesarios (obligatorios, máximo 10000 caracteres cada uno). El diagnóstico queda asociado a la recepción y registra la fecha. La restricción única existente en MySQL impide duplicados incluso ante solicitudes simultáneas. Al guardar se abre HU-R15 para generar la orden de servicio.
+
+No se requieren modificaciones del esquema. El autor mecánico queda sin asignar hasta integrar autenticación; no se atribuye el diagnóstico a un usuario ficticio. Pruebas: `mvn -Dtest=DiagnosticoServiceTests,GenerarOrdenServiceTests,OrdenServicioServiceTests test`.
