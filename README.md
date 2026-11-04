@@ -31,10 +31,10 @@ AutoFlow reúne en una sola aplicación web las actividades de un taller automot
 
 ## 4. Avance del proyecto (Avance 2)
 
-@De-Frost : H18, H19, H20.
-@jose-arroyo-dev : HU14, HU15, HU16.
-@sbrenes26 : HU8, HU9, HU10.
-@AndreyKdo : HU6, HU3 y HU5.
+@De-Frost : H18, H19, H20.  
+@jose-arroyo-dev : HU14, HU15, HU16.  
+@sbrenes26 : HU8, HU9, HU10.  
+@AndreyKdo : HU6, HU3 y HU5.  
 
 ## 5. Requsitos para ejecucion
 
