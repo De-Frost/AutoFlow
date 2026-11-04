@@ -3,7 +3,7 @@
     <div class="af-tarjeta">
         <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
             <h1 class="af-tarjeta-titulo h4 m-0 me-auto">
-                <i class="fa-solid fa-calendar-days"></i> [[#{reserva.listado}]]
+                [[#{reserva.listado}]]
                 <span class="badge text-bg-primary">[[${totalReservas}]]</span>
             </h1>
             <button type="button" class="btn btn-primary"
@@ -89,7 +89,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
                     <h2 class="modal-title fs-5" id="agregarReservaLabel">
-                        <i class="fa-solid fa-calendar-plus"></i> [[#{reserva.agregar}]]</h2>
+                        [[#{reserva.agregar}]]</h2>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form th:action="@{/reserva/guardar}" method="post" class="was-validated">
@@ -146,7 +146,7 @@
                     <input type="hidden" name="idReserva" id="modalId"/>
                     <div class="modal-header bg-warning">
                         <h2 class="modal-title fs-5" id="cancelarLabel">
-                            <i class="fa-solid fa-triangle-exclamation"></i> [[#{reserva.cancelar.titulo}]]</h2>
+                            [[#{reserva.cancelar.titulo}]]</h2>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body">

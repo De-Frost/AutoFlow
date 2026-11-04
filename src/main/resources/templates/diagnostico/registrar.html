@@ -3,19 +3,19 @@
 <head th:replace="~{general/fragmentos :: head}"></head>
 <body><header th:replace="~{general/fragmentos :: header}"></header>
 <main class="container af-hu16"><section class="af-tarjeta af-orden af-diagnostico">
-<h1>Registrar diagnóstico</h1>
-<div th:with="v=${recepcion.vehiculo}"><h2>Vehículo</h2>
+<h1>[[#{diagnostico.registrar}]]</h1>
+<div th:with="v=${recepcion.vehiculo}"><h2>[[#{diagnostico.vehiculo}]]</h2>
 <p class="mb-1" th:text="${v.marca + ' ' + v.modelo + ' ' + v.anio + ' - ' + v.placa}"></p>
-<p class="mb-1" th:text="${'Cliente: ' + v.cliente.nombre}"></p>
-<p th:text="${'Recepción: REC-' + recepcion.idRecepcion}"></p></div>
-<p class="small" th:text="${'Falla reportada: ' + recepcion.fallaReportada}"></p>
+<p class="mb-1">[[#{diagnostico.cliente}]]: [[${v.cliente.nombre}]]</p>
+<p>[[#{diagnostico.recepcion}]]: REC-[[${recepcion.idRecepcion}]]</p></div>
+<p class="small">[[#{diagnostico.fallareportada}]]: [[${recepcion.fallaReportada}]]</p>
 <form method="post" th:action="@{/diagnostico/registrar/{id}(id=${recepcion.idRecepcion})}" th:object="${formulario}">
-<div class="af-campo-diagnostico"><label for="fallasEncontradas">FALLAS ENCONTRADAS *</label>
+<div class="af-campo-diagnostico"><label for="fallasEncontradas">[[#{diagnostico.fallas}]]</label>
 <textarea id="fallasEncontradas" th:field="*{fallasEncontradas}" rows="3" required maxlength="10000" aria-describedby="error-fallas" th:attr="aria-invalid=${#fields.hasErrors('fallasEncontradas')}"></textarea></div>
 <p id="error-fallas" class="text-danger" th:if="${#fields.hasErrors('fallasEncontradas')}" th:errors="*{fallasEncontradas}"></p>
-<div class="af-campo-diagnostico"><label for="trabajosNecesarios">TRABAJOS NECESARIOS *</label>
+<div class="af-campo-diagnostico"><label for="trabajosNecesarios">[[#{diagnostico.trabajos}]]</label>
 <textarea id="trabajosNecesarios" th:field="*{trabajosNecesarios}" rows="2" required maxlength="10000" aria-describedby="error-trabajos" th:attr="aria-invalid=${#fields.hasErrors('trabajosNecesarios')}"></textarea></div>
 <p id="error-trabajos" class="text-danger" th:if="${#fields.hasErrors('trabajosNecesarios')}" th:errors="*{trabajosNecesarios}"></p>
-<div class="af-acciones"><a th:href="@{/diagnostico/listado}">← Volver</a><button class="af-boton" type="submit">Guardar diagnóstico</button></div>
-</form></section></main><div class="container pb-3 af-ruta">Diagnóstico / Servicio</div>
+<div class="af-acciones"><a th:href="@{/diagnostico/listado}">← [[#{accion.regresar}]]</a><button class="af-boton" type="submit">[[#{diagnostico.guardar}]]</button></div>
+</form></section></main><div class="container pb-3 af-ruta">[[#{diagnostico.ruta}]]</div>
 <footer th:replace="~{general/fragmentos :: footer}"></footer></body></html>

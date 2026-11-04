@@ -2,7 +2,9 @@ package com.autoflow.controller;
 
 import com.autoflow.domain.Reserva;
 import com.autoflow.service.RecepcionService;
+import java.util.Locale;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import org.springframework.validation.BindingResult;
 public class RecepcionController {
 
     private final RecepcionService recepcionService;
+    private final MessageSource messageSource;
 
     //Pantalla principal de recepcion
     @GetMapping("/listado")
@@ -49,7 +52,8 @@ public class RecepcionController {
     public String detalleReserva(
             @PathVariable Integer idReserva,
             Model model,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes,
+            Locale locale) {
 
         try {
             Reserva reserva = recepcionService.validarLlegada(idReserva);
@@ -57,7 +61,8 @@ public class RecepcionController {
             return "recepcion/detalle";
         } catch (IllegalArgumentException e) {
             // Reserva cancelada o que ya fue recibida: se vuelve a la busqueda con el aviso
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage(e.getMessage(), null, locale));
             return "redirect:/recepcion/con-reserva";
         }
     }
@@ -66,7 +71,8 @@ public class RecepcionController {
     public String estadoInicial(
             @PathVariable Integer idReserva,
             Model model,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes,
+            Locale locale) {
 
         try {
             Reserva reserva = recepcionService.validarLlegada(idReserva);
@@ -74,7 +80,8 @@ public class RecepcionController {
             model.addAttribute("recepcion", new Recepcion());
             return "recepcion/estado";
         } catch (IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage(e.getMessage(), null, locale));
             return "redirect:/recepcion/con-reserva";
         }
     }
@@ -85,26 +92,28 @@ public class RecepcionController {
             @Valid @ModelAttribute("recepcion") Recepcion recepcion,
             BindingResult resultado,
             Model model,
-            RedirectAttributes redirectAttributes) {
-
-        if (resultado.hasErrors()) {
-            model.addAttribute("reserva",
-                    recepcionService.obtenerReserva(idReserva));
-
-            return "recepcion/estado";
-        }
+            RedirectAttributes redirectAttributes,
+            Locale locale) {
 
         try {
+            if (resultado.hasErrors()) {
+                model.addAttribute("reserva",
+                        recepcionService.obtenerReserva(idReserva));
+
+                return "recepcion/estado";
+            }
+
             recepcionService.registrarConReserva(idReserva, recepcion);
 
             redirectAttributes.addFlashAttribute(
                     "todoOk",
-                    "La llegada del vehículo se registró correctamente");
+                    messageSource.getMessage("recepcion.exitoConReserva", null, locale));
 
             return "redirect:/recepcion/listado";
 
         } catch (IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage(e.getMessage(), null, locale));
 
             return "redirect:/recepcion/con-reserva/" + idReserva;
         }
@@ -125,14 +134,22 @@ public class RecepcionController {
     @GetMapping("/sin-reserva/{idVehiculo}")
     public String detalleVehiculo(
             @PathVariable Integer idVehiculo,
-            Model model) {
+            Model model,
+            RedirectAttributes redirectAttributes,
+            Locale locale) {
 
-        Vehiculo vehiculo = recepcionService.obtenerVehiculo(idVehiculo);
+        try {
+            Vehiculo vehiculo = recepcionService.obtenerVehiculo(idVehiculo);
 
-        model.addAttribute("vehiculo", vehiculo);
-        model.addAttribute("recepcion", new Recepcion());
+            model.addAttribute("vehiculo", vehiculo);
+            model.addAttribute("recepcion", new Recepcion());
 
-        return "recepcion/inicialsinreserva";
+            return "recepcion/inicialsinreserva";
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage(e.getMessage(), null, locale));
+            return "redirect:/recepcion/sin-reserva";
+        }
     }
 
     @PostMapping("/guardar-sin-reserva/{idVehiculo}")
@@ -141,30 +158,31 @@ public class RecepcionController {
             @Valid @ModelAttribute("recepcion") Recepcion recepcion,
             BindingResult resultado,
             Model model,
-            RedirectAttributes redirectAttributes) {
-
-        if (resultado.hasErrors()) {
-
-            model.addAttribute("vehiculo",
-                    recepcionService.obtenerVehiculo(idVehiculo));
-
-            return "recepcion/inicialsinreserva";
-        }
+            RedirectAttributes redirectAttributes,
+            Locale locale) {
 
         try {
+
+            if (resultado.hasErrors()) {
+
+                model.addAttribute("vehiculo",
+                        recepcionService.obtenerVehiculo(idVehiculo));
+
+                return "recepcion/inicialsinreserva";
+            }
 
             recepcionService.registrarSinReserva(idVehiculo, recepcion);
 
             redirectAttributes.addFlashAttribute(
                     "todoOk",
-                    "La llegada del vehículo sin reserva se registró correctamente");
+                    messageSource.getMessage("recepcion.exitoSinReserva", null, locale));
 
             return "redirect:/recepcion/listado";
 
         } catch (IllegalArgumentException e) {
 
             redirectAttributes.addFlashAttribute(
-                    "error", e.getMessage());
+                    "error", messageSource.getMessage(e.getMessage(), null, locale));
 
             return "redirect:/recepcion/sin-reserva/" + idVehiculo;
         }

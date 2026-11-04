@@ -8,8 +8,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -23,36 +21,34 @@ public class GenerarOrdenService {
 
     public Diagnostico diagnostico(Integer id) {
         return diagnosticos.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Diagnóstico no encontrado"));
+                new IllegalArgumentException("generar.error01"));
     }
 
     public List<DetalleOrdenServicio> servicios(Integer id) {
         return detalles.findByOrdenIdOrden(id);
     }
 
-    public record Linea(String descripcion, Integer cantidad, BigDecimal costo) { }
-
     @Transactional
-    public OrdenServicio generar(Integer idDiagnostico, List<Linea> lineas) {
+    public OrdenServicio generar(Integer idDiagnostico, List<DetalleOrdenServicio> lineas) {
         var diagnostico = diagnostico(idDiagnostico);
         if (ordenes.existsByDiagnosticoIdDiagnostico(idDiagnostico)) {
-            throw new IllegalArgumentException("Este diagnóstico ya tiene una orden de servicio.");
+            throw new IllegalArgumentException("generar.error02");
         }
         if (lineas == null || lineas.isEmpty() || lineas.size() > 50) {
-            throw new IllegalArgumentException("Ingrese entre 1 y 50 servicios.");
+            throw new IllegalArgumentException("generar.error03");
         }
         BigDecimal total = BigDecimal.ZERO;
         for (var linea : lineas) {
-            if (linea == null || linea.descripcion() == null || linea.descripcion().isBlank()
-                    || linea.descripcion().length() > 150 || linea.cantidad() == null
-                    || linea.cantidad() < 1 || linea.costo() == null
-                    || linea.costo().signum() < 0 || linea.costo().scale() > 2) {
-                throw new IllegalArgumentException("Revise la descripción, cantidad y costo de cada servicio (máximo dos decimales).");
+            if (linea == null || linea.getDescripcion() == null || linea.getDescripcion().isBlank()
+                    || linea.getDescripcion().length() > 150 || linea.getCantidad() == null
+                    || linea.getCantidad() < 1 || linea.getCosto() == null
+                    || linea.getCosto().signum() < 0 || linea.getCosto().scale() > 2) {
+                throw new IllegalArgumentException("generar.error04");
             }
-            total = total.add(linea.costo().multiply(BigDecimal.valueOf(linea.cantidad())));
+            total = total.add(linea.getCosto().multiply(BigDecimal.valueOf(linea.getCantidad())));
         }
         if (total.compareTo(new BigDecimal("9999999999.99")) > 0) {
-            throw new IllegalArgumentException("El subtotal supera el monto permitido.");
+            throw new IllegalArgumentException("generar.error05");
         }
         var orden = new OrdenServicio();
         orden.setDiagnostico(diagnostico);
@@ -63,9 +59,9 @@ public class GenerarOrdenService {
         for (var linea : lineas) {
             var detalle = new DetalleOrdenServicio();
             detalle.setOrden(orden);
-            detalle.setDescripcion(linea.descripcion().trim());
-            detalle.setCantidad(linea.cantidad());
-            detalle.setCosto(linea.costo());
+            detalle.setDescripcion(linea.getDescripcion().trim());
+            detalle.setCantidad(linea.getCantidad());
+            detalle.setCosto(linea.getCosto());
             detalles.save(detalle);
         }
         return orden;

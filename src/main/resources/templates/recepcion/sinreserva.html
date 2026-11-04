@@ -11,11 +11,10 @@
 
     <section class="af-tarjeta af-orden">
 
-        <h1>Recepción de vehículo sin reserva</h1>
+        <h1>[[#{recepcion.sin.titulo}]]</h1>
 
         <p>
-            Busque el vehículo por placa o por nombre del cliente
-            para registrar su llegada al taller.
+            [[#{recepcion.sin.texto}]]
         </p>
 
         <form th:action="@{/recepcion/sin-reserva}"
@@ -24,7 +23,7 @@
 
             <div class="mb-3">
                 <label for="busqueda" class="form-label">
-                    Placa o nombre del cliente
+                    [[#{recepcion.placacliente}]]
                 </label>
 
                 <input type="text"
@@ -32,55 +31,55 @@
                        name="busqueda"
                        class="form-control"
                        th:value="${busqueda}"
-                       placeholder="Ingrese la placa o el nombre">
+                       th:placeholder="#{recepcion.sin.placeholder}">
             </div>
 
             <button type="submit" class="af-boton">
-                Buscar vehículo
+                [[#{recepcion.buscarvehiculo}]]
             </button>
 
         </form>
 
-        <h3>Vehículos registrados</h3>
+        <h3>[[#{recepcion.vehiculos}]]</h3>
 
         <div th:if="${#lists.isEmpty(vehiculos)}"
              class="alert alert-info">
-            No se encontraron vehículos.
+            [[#{recepcion.sinvehiculos}]]
         </div>
 
         <div th:each="vehiculo : ${vehiculos}"
              class="af-tarjeta mb-3">
 
             <p>
-                <strong>Placa:</strong>
+                <strong>[[#{recepcion.placa}]]:</strong>
                 <span th:text="${vehiculo.placa}"></span>
             </p>
 
             <p>
-                <strong>Marca:</strong>
+                <strong>[[#{recepcion.marca}]]:</strong>
                 <span th:text="${vehiculo.marca}"></span>
             </p>
 
             <p>
-                <strong>Modelo:</strong>
+                <strong>[[#{recepcion.modelo}]]:</strong>
                 <span th:text="${vehiculo.modelo}"></span>
             </p>
 
             <p>
-                <strong>Cliente:</strong>
+                <strong>[[#{recepcion.cliente}]]:</strong>
                 <span th:text="${vehiculo.cliente.nombre}"></span>
             </p>
 
             <a th:href="@{/recepcion/sin-reserva/{id}(id=${vehiculo.idVehiculo})}"
                class="af-boton">
-                Seleccionar vehículo
+                [[#{recepcion.seleccionarvehiculo}]]
             </a>
 
         </div>
 
         <div class="mt-4">
             <a th:href="@{/recepcion/listado}" class="af-boton">
-                Volver
+                [[#{accion.regresar}]]
             </a>
         </div>
 
@@ -89,7 +88,7 @@
 </main>
 
 <div class="container pb-3 af-ruta">
-    Recepción / Sin reserva
+    [[#{plantilla.recepcion}]] / [[#{recepcion.sinreserva}]]
 </div>
 
 <footer th:replace="~{general/fragmentos :: footer}"></footer>

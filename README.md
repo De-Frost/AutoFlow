@@ -28,24 +28,67 @@ AutoFlow reúne en una sola aplicación web las actividades de un taller automot
 3.	Los commits son pequeños, con mensajes descriptivos, y cada integrante los hace con su propia cuenta.
 4.	Al terminar la tarea se abre un pull request hacia main. Mientras otro integrante revisa y aprueba el pull request.
 5.	Los conflictos se resuelven en la rama de trabajo y no en main.
-6.	Las tareas pendientes se registran como issues en GitHub, con prioridad alta, media o baja.
 
-## 4. HU16: asignar mecánico a la orden
+## 4. Avance del proyecto (Avance 2)
 
-Ingresar a **Servicios → Órdenes de servicio** (también desde **Mecánicos** o **Seguimiento**). Abrir una orden, pulsar **Asignar mecánico**, seleccionar un mecánico activo y revisar la confirmación. La carga mostrada corresponde a las órdenes no finalizadas y se vuelve a consultar después de asignar.
+@De-Frost : H18, H19, H20.
+@jose-arroyo-dev : HU14, HU15, HU16.
+@sbrenes26 : HU8, HU9, HU10.
+@AndreyKdo : HU6, HU3 y HU5.
 
-Desde el detalle se puede cambiar el responsable y actualizar el estado a **Pendiente**, **En proceso** o **Finalizada**. El cambio de estado registra su fecha; iniciar o finalizar requiere un responsable. Las órdenes finalizadas no permiten cambiar el mecánico.
+## 5. Requsitos para ejecucion
 
-Las pantallas usan los datos existentes de MySQL y no requieren cambios al esquema ni ejecutar nuevamente el script de creación. Para probar con los datos del script, abrir `/orden/1`, que ya cuenta con diagnóstico, cliente y vehículo.
+### Requisitos
 
-Pruebas de las reglas de negocio: `mvn -Dtest=OrdenServicioServiceTests test`.
+- JDK 21
+- Netbeans con Maven
+- MySQL 8
 
-El proyecto todavía no implementa autenticación ni autorización; el acceso exclusivo del administrador deberá conectarse cuando se incorpore el módulo de seguridad.
+### Pasos
 
-## HU-R14: registrar diagnóstico
+1. Clonar el repositorio
+2. Abrir MySQL Workbench y ejecutar completo el script "scriptBD/autoflow.sql"
+3. Configurar la clave de MySQL con variables de entorno, desde una terminal de windows: setx DB_PASSWORD "su_clave"
+4. Ejecutar el proyecto.
+5. Abrir "http://localhost:8080".
 
-Acceso: **Servicios → Diagnósticos** (`/diagnostico/listado`). Se muestran únicamente recepciones sin diagnóstico; la búsqueda admite placa o nombre del cliente, sin distinguir mayúsculas ni acentos. El botón **Siguiente** abre la recepción seleccionada.
 
-Registrar las fallas encontradas y los trabajos necesarios (obligatorios, máximo 10000 caracteres cada uno). El diagnóstico queda asociado a la recepción y registra la fecha. La restricción única existente en MySQL impide duplicados incluso ante solicitudes simultáneas. Al guardar se abre HU-R15 para generar la orden de servicio.
+## 6. Documentación por historia
 
-No se requieren modificaciones del esquema. El autor mecánico queda sin asignar hasta integrar autenticación; no se atribuye el diagnóstico a un usuario ficticio. Pruebas: `mvn -Dtest=DiagnosticoServiceTests,GenerarOrdenServiceTests,OrdenServicioServiceTests test`.
+### Reservas (HU-R06, HU-R03, HU-R05)
+
+- Muestra las reservas con filtros por fecha, estado y placa. Permite registrar una reserva sin choques de horario, y cancelarla indicando el motivo. Una reserva que ya llegó al taller no se puede cancelar.
+
+### Recepción de vehículos (HU-R08, HU-R09, HU-R10)
+
+- Con reserva: se busca por placa o cliente, se confirma la llegada y se registra el estado inicial del vehículo. Sin reserva: se elige el vehículo y se registra igual. Cada reserva se recibe una sola vez.
+
+### Registrar diagnóstico (HU-R14)
+
+- Lista los vehículos recibidos que aún no tienen diagnóstico. Se escriben las fallas y los trabajos necesarios y al guardar se pasa a generar la orden.
+
+### Generar orden de servicio (HU-R15)
+
+- Se elige un diagnóstico sin orden y se agregan los servicios con descripción, cantidad y costo. La orden se crea en estado Pendiente y sin mecánico.
+
+### Asignar mecánico y estado de la orden (HU-R16, HU-R17)
+
+- Se asigna un mecánico activo (se ve su carga de trabajo) y se cambia el estado: Pendiente, En proceso o Finalizada. No se puede iniciar ni finalizar sin mecánico, y una orden finalizada ya no se modifica.
+
+### Inventario de repuestos (HU-R18)
+
+- Permite registrar, modificar, buscar por código o nombre y eliminar repuestos. El código no se repite y un repuesto que ya se usó no se puede eliminar.
+
+### Consumo de repuestos (HU-R19)
+
+- Se elige una orden sin finalizar y un repuesto; no deja pedir más de lo que hay en inventario. Al registrar, se descuenta el stock, el repuesto queda en la orden con su precio y se guarda en el historial.
+
+### Facturación (HU-R20)
+
+- Lista las órdenes finalizadas que aún no tienen factura. La vista previa muestra cliente, vehículo, servicios y repuestos, y el total. Cada orden tiene una sola factura.
+
+## 7. Referencias
+
+- **Foto de fondo del taller:** Autor: Mike van Schoonderwalt. Fuente: [Pexels](https://www.pexels.com/photo/engine-parts-on-shelves-in-car-workshop-5506059/). Licencia: Pexels License (uso libre).
+- **Prototipo de diseño:** Figma del equipo.
+
