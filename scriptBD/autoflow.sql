@@ -202,7 +202,6 @@ INSERT INTO repuesto (codigo, nombre, precio, cantidad_disponible, activo) VALUE
   ("REP004", "Bujía de iridio", 9800.00, 16, TRUE),
   ("REP005", "Filtro de aire", 11000.00, 3, TRUE);
 
-/*Usuarios del personal: {noop} le indica a Spring Security que la clave no esta encriptada*/
 INSERT INTO usuario (username, password, nombre, activo, id_rol) VALUES
   ("admin", "{noop}Admin1", "Administrador del taller", TRUE, 1),
   ("recepcion", "{noop}Recep1", "Laura Mora Solano", TRUE, 2),
@@ -236,8 +235,3 @@ INSERT INTO orden_servicio (fecha, estado, fecha_estado, total, id_diagnostico, 
 
 INSERT INTO detalle_orden_servicio (descripcion, cantidad, costo, id_orden) VALUES
   ("Mano de obra cambio de pastillas", 1, 25000.00, 1);
-  
-  
-  /*--- Pruebas --- */
-SELECT username, password FROM autoflow.usuario;  
-SELECT * FROM autoflow.reserva;
