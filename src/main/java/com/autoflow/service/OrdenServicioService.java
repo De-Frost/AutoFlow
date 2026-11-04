@@ -5,12 +5,13 @@ import com.autoflow.domain.Usuario;
 import com.autoflow.repository.OrdenServicioRepository;
 import com.autoflow.repository.UsuarioRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -26,16 +27,24 @@ public class OrdenServicioService {
 
     public OrdenServicio obtener(Integer id) {
         return ordenes.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Orden no encontrada"));
+                new IllegalArgumentException("orden.error01"));
     }
 
-    public record MecanicoDisponible(Integer id, String nombre, long carga) { }
+    @Getter
+    @AllArgsConstructor
+    public static class MecanicoDisponible {
+        private Integer id;
+        private String nombre;
+        private long carga;
+    }
 
     public List<MecanicoDisponible> mecanicos() {
-        return usuarios.findByRolNombreAndActivoTrueOrderByNombreAsc("MECANICO").stream()
-                .map(u -> new MecanicoDisponible(u.getIdUsuario(), u.getNombre(),
-                        ordenes.countByMecanicoIdUsuarioAndEstadoNot(u.getIdUsuario(), "Finalizada")))
-                .toList();
+        List<MecanicoDisponible> disponibles = new ArrayList<>();
+        for (var u : usuarios.findByRolNombreAndActivoTrueOrderByNombreAsc("MECANICO")) {
+            disponibles.add(new MecanicoDisponible(u.getIdUsuario(), u.getNombre(),
+                    ordenes.countByMecanicoIdUsuarioAndEstadoNot(u.getIdUsuario(), "Finalizada")));
+        }
+        return disponibles;
     }
 
     public long carga(Usuario mecanico) {
@@ -46,13 +55,13 @@ public class OrdenServicioService {
     public void asignar(Integer idOrden, Integer idMecanico) {
         var orden = obtener(idOrden);
         if ("Finalizada".equals(orden.getEstado())) {
-            throw new IllegalArgumentException("No se puede asignar una orden finalizada.");
+            throw new IllegalArgumentException("orden.error02");
         }
         var mecanico = usuarios.findById(idMecanico)
-                .orElseThrow(() -> new IllegalArgumentException("El mecánico no existe."));
+                .orElseThrow(() -> new IllegalArgumentException("orden.error03"));
         if (!mecanico.isActivo() || mecanico.getRol() == null
                 || !"MECANICO".equals(mecanico.getRol().getNombre())) {
-            throw new IllegalArgumentException("Seleccione un mecánico activo.");
+            throw new IllegalArgumentException("orden.error04");
         }
         orden.setMecanico(mecanico);
         ordenes.save(orden);
@@ -61,11 +70,11 @@ public class OrdenServicioService {
     @Transactional
     public void actualizarEstado(Integer idOrden, String estado) {
         if (!ESTADOS.contains(estado)) {
-            throw new IllegalArgumentException("El estado seleccionado no es válido.");
+            throw new IllegalArgumentException("orden.error05");
         }
         var orden = obtener(idOrden);
         if (orden.getMecanico() == null && !"Pendiente".equals(estado)) {
-            throw new IllegalArgumentException("Asigne un mecánico antes de iniciar o finalizar el trabajo.");
+            throw new IllegalArgumentException("orden.error06");
         }
         if (!estado.equals(orden.getEstado())) {
             orden.setEstado(estado);

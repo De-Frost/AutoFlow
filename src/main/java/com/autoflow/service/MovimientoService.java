@@ -9,6 +9,7 @@ import com.autoflow.repository.MovimientoInventarioRepository;
 import com.autoflow.repository.OrdenServicioRepository;
 import com.autoflow.repository.RepuestoRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,9 +36,13 @@ public class MovimientoService {
     // Órdenes a las que todavía se les pueden cargar repuestos: las que no están Finalizadas
     @Transactional(readOnly = true)
     public List<OrdenServicio> getOrdenesAbiertas() {
-        return ordenRepository.findAllByOrderByFechaDesc().stream()
-                .filter(o -> !FINALIZADA.equals(o.getEstado()))
-                .toList();
+        List<OrdenServicio> abiertas = new ArrayList<>();
+        for (OrdenServicio o : ordenRepository.findAllByOrderByFechaDesc()) {
+            if (!FINALIZADA.equals(o.getEstado())) {
+                abiertas.add(o);
+            }
+        }
+        return abiertas;
     }
 
     //Solo los repuestos activos se pueden usar

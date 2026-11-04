@@ -4,9 +4,11 @@ import com.autoflow.service.DiagnosticoService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.util.Locale;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/diagnostico")
 public class DiagnosticoController {
     private final DiagnosticoService servicio;
+    private final MessageSource messageSource;
 
     @Getter @Setter
     public static class Formulario {
@@ -38,32 +41,41 @@ public class DiagnosticoController {
     }
 
     @GetMapping("/registrar/{id}")
-    public String formulario(@PathVariable Integer id, Model model, RedirectAttributes flash) {
-        var recepcion = servicio.recepcion(id);
-        if (servicio.registrado(id)) {
-            flash.addFlashAttribute("error", "Esta recepción ya tiene un diagnóstico registrado.");
+    public String formulario(@PathVariable Integer id, Model model,
+            RedirectAttributes redirectAttributes, Locale locale) {
+        try {
+            var recepcion = servicio.recepcion(id);
+            if (servicio.registrado(id)) {
+                redirectAttributes.addFlashAttribute("error",
+                        messageSource.getMessage("diagnostico.error02", null, locale));
+                return "redirect:/diagnostico/listado";
+            }
+            model.addAttribute("recepcion", recepcion);
+            if (!model.containsAttribute("formulario")) model.addAttribute("formulario", new Formulario());
+            return "diagnostico/registrar";
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage(e.getMessage(), null, locale));
             return "redirect:/diagnostico/listado";
         }
-        model.addAttribute("recepcion", recepcion);
-        if (!model.containsAttribute("formulario")) model.addAttribute("formulario", new Formulario());
-        return "diagnostico/registrar";
     }
 
     @PostMapping("/registrar/{id}")
     public String guardar(@PathVariable Integer id,
             @Valid @ModelAttribute("formulario") Formulario formulario, BindingResult binding,
-            Model model, RedirectAttributes flash) {
-        if (binding.hasErrors()) return formulario(id, model, flash);
+            Model model, RedirectAttributes redirectAttributes, Locale locale) {
+        if (binding.hasErrors()) return formulario(id, model, redirectAttributes, locale);
         try {
             var diagnostico = servicio.registrar(id, formulario.getFallasEncontradas(), formulario.getTrabajosNecesarios());
-            flash.addFlashAttribute("todoOk", "Diagnóstico registrado correctamente.");
+            redirectAttributes.addFlashAttribute("todoOk",
+                    messageSource.getMessage("diagnostico.exito", null, locale));
             return "redirect:/orden/generar/" + diagnostico.getIdDiagnostico();
-        } catch (IllegalArgumentException ex) {
-            model.addAttribute("error", ex.getMessage());
-            return formulario(id, model, flash);
-        } catch (DataIntegrityViolationException ex) {
-            model.addAttribute("error", "No se pudo guardar el diagnóstico. Compruebe si la recepción ya fue diagnosticada.");
-            return formulario(id, model, flash);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", messageSource.getMessage(e.getMessage(), null, locale));
+            return formulario(id, model, redirectAttributes, locale);
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("error", messageSource.getMessage("diagnostico.error07", null, locale));
+            return formulario(id, model, redirectAttributes, locale);
         }
     }
 }

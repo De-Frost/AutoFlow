@@ -6,10 +6,8 @@ import com.autoflow.repository.ReservaRepository;
 import com.autoflow.repository.RecepcionRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 import com.autoflow.domain.Vehiculo;
 import com.autoflow.repository.VehiculoRepository;
 
@@ -33,10 +31,7 @@ public class RecepcionService {
     public Reserva obtenerReserva(Integer idReserva) {
         return reservaRepository.findById(idReserva)
                 .orElseThrow(()
-                        -> new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
-                                "La reserva no existe"
-                        )
+                        -> new IllegalArgumentException("recepcion.error01")
                 );
     }
 
@@ -47,13 +42,13 @@ public class RecepcionService {
 
         if (!"Confirmada".equals(reserva.getEstado())) {
             throw new IllegalArgumentException(
-                    "La reserva no está confirmada"
+                    "recepcion.error02"
             );
         }
 
         if (recepcionRepository.existsByReservaIdReserva(idReserva)) {
             throw new IllegalArgumentException(
-                    "Esta reserva ya tiene una recepción registrada"
+                    "recepcion.error03"
             );
         }
 
@@ -87,9 +82,7 @@ public class RecepcionService {
     public Vehiculo obtenerVehiculo(Integer idVehiculo) {
 
         return vehiculoRepository.findById(idVehiculo)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "El vehículo no existe"));
+                .orElseThrow(() -> new IllegalArgumentException("recepcion.error04"));
     }
 
     @Transactional

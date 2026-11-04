@@ -5,13 +5,12 @@ import com.autoflow.domain.Recepcion;
 import com.autoflow.repository.DiagnosticoRepository;
 import com.autoflow.repository.RecepcionRepository;
 import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -22,9 +21,14 @@ public class DiagnosticoService {
 
     public List<Recepcion> pendientes(String busqueda) {
         String filtro = normalizar(busqueda == null ? "" : busqueda.trim());
-        return recepciones.findSinDiagnostico().stream().filter(r ->
-                normalizar(r.getVehiculo().getPlaca()).contains(filtro)
-                || normalizar(r.getVehiculo().getCliente().getNombre()).contains(filtro)).toList();
+        List<Recepcion> resultado = new ArrayList<>();
+        for (Recepcion r : recepciones.findSinDiagnostico()) {
+            if (normalizar(r.getVehiculo().getPlaca()).contains(filtro)
+                    || normalizar(r.getVehiculo().getCliente().getNombre()).contains(filtro)) {
+                resultado.add(r);
+            }
+        }
+        return resultado;
     }
 
     private static String normalizar(String texto) {
@@ -34,7 +38,7 @@ public class DiagnosticoService {
 
     public Recepcion recepcion(Integer id) {
         return recepciones.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Recepción no encontrada"));
+                new IllegalArgumentException("diagnostico.error01"));
     }
 
     public boolean registrado(Integer id) {
@@ -45,10 +49,10 @@ public class DiagnosticoService {
     public Diagnostico registrar(Integer idRecepcion, String fallas, String trabajos) {
         var recepcion = recepcion(idRecepcion);
         if (registrado(idRecepcion)) {
-            throw new IllegalArgumentException("Esta recepción ya tiene un diagnóstico registrado.");
+            throw new IllegalArgumentException("diagnostico.error02");
         }
-        validar(fallas, "Las fallas encontradas");
-        validar(trabajos, "Los trabajos necesarios");
+        validar(fallas, "diagnostico.error03", "diagnostico.error05");
+        validar(trabajos, "diagnostico.error04", "diagnostico.error06");
         var diagnostico = new Diagnostico();
         diagnostico.setRecepcion(recepcion);
         diagnostico.setFallasEncontradas(fallas.strip());
@@ -56,12 +60,12 @@ public class DiagnosticoService {
         return diagnosticos.saveAndFlush(diagnostico);
     }
 
-    private static void validar(String texto, String campo) {
+    private static void validar(String texto, String llaveVacio, String llaveLargo) {
         if (texto == null || texto.isBlank()) {
-            throw new IllegalArgumentException(campo + " son obligatorios.");
+            throw new IllegalArgumentException(llaveVacio);
         }
         if (texto.length() > 10000) {
-            throw new IllegalArgumentException(campo + " no pueden superar los 10000 caracteres.");
+            throw new IllegalArgumentException(llaveLargo);
         }
     }
 }
