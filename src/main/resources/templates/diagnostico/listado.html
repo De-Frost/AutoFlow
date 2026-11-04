@@ -3,16 +3,16 @@
 <head th:replace="~{general/fragmentos :: head}"></head>
 <body><header th:replace="~{general/fragmentos :: header}"></header>
 <main class="container af-hu16"><section class="af-tarjeta af-orden af-diagnostico">
-<h1>Diagnósticos pendientes</h1><p>Vehículos recibidos que requieren evaluación técnica.</p>
+<h1>[[#{diagnostico.pendientes}]]</h1><p>[[#{diagnostico.pendientes.texto}]]</p>
 <form method="get" th:action="@{/diagnostico/listado}" class="af-filtro-diagnostico" role="search">
-<label class="visually-hidden" for="busqueda">Buscar por placa o cliente</label>
-<input class="form-control" id="busqueda" name="busqueda" type="search" placeholder="Buscar por placa o cliente..." th:value="${busqueda}"/>
-<button class="af-boton" type="submit">Buscar</button></form>
-<p class="my-4" th:if="${#lists.isEmpty(recepciones)}" role="status">No se encontraron vehículos pendientes de diagnóstico.</p>
+<label class="visually-hidden" for="busqueda">[[#{diagnostico.buscar}]]</label>
+<input class="form-control" id="busqueda" name="busqueda" type="search" th:placeholder="#{diagnostico.buscar.placeholder}" th:value="${busqueda}"/>
+<button class="af-boton" type="submit">[[#{accion.buscar}]]</button></form>
+<p class="my-4" th:if="${#lists.isEmpty(recepciones)}" role="status">[[#{diagnostico.sinresultados}]]</p>
 <div class="table-responsive" th:unless="${#lists.isEmpty(recepciones)}"><table class="table af-tabla-servicios">
-<thead><tr><th>Placa</th><th>Cliente</th><th>Recepción</th><th><span class="visually-hidden">Acción</span></th></tr></thead>
+<thead><tr><th>[[#{diagnostico.placa}]]</th><th>[[#{diagnostico.cliente}]]</th><th>[[#{diagnostico.recepcion}]]</th><th><span class="visually-hidden">[[#{diagnostico.accion}]]</span></th></tr></thead>
 <tbody><tr th:each="r : ${recepciones}"><td th:text="${r.vehiculo.placa}"></td><td th:text="${r.vehiculo.cliente.nombre}"></td>
-<td th:text="${'REC-' + r.idRecepcion}"></td><td><a class="af-boton" th:href="@{/diagnostico/registrar/{id}(id=${r.idRecepcion})}" th:aria-label="${'Registrar diagnóstico de ' + r.vehiculo.placa}">Siguiente</a></td></tr></tbody></table></div>
-<a th:href="@{/servicios}">← Servicios</a>
-</section></main><div class="container pb-3 af-ruta">Diagnóstico / Servicio</div>
+<td th:text="${'REC-' + r.idRecepcion}"></td><td><a class="af-boton" th:href="@{/diagnostico/registrar/{id}(id=${r.idRecepcion})}" th:aria-label="|#{diagnostico.registrarde} ${r.vehiculo.placa}|">[[#{accion.siguiente}]]</a></td></tr></tbody></table></div>
+<a th:href="@{/servicios}">← [[#{plantilla.servicios}]]</a>
+</section></main><div class="container pb-3 af-ruta">[[#{diagnostico.ruta}]]</div>
 <footer th:replace="~{general/fragmentos :: footer}"></footer></body></html>

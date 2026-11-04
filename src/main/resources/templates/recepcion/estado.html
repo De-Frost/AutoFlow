@@ -11,21 +11,21 @@
 
             <section class="af-tarjeta af-orden">
 
-                <h1>Estado inicial del vehículo</h1>
+                <h1>[[#{recepcion.estadoinicial}]]</h1>
 
                 <p>
-                    Registre las condiciones de ingreso del vehículo.
+                    [[#{recepcion.estadotexto}]]
                 </p>
 
-                <h3 class="mt-4">Información del vehículo</h3>
+                <h3 class="mt-4">[[#{recepcion.infovehiculo}]]</h3>
 
                 <p>
-                    <strong>Placa:</strong>
+                    <strong>[[#{recepcion.placa}]]:</strong>
                     <span th:text="${reserva.vehiculo.placa}"></span>
                 </p>
 
                 <p>
-                    <strong>Cliente:</strong>
+                    <strong>[[#{recepcion.cliente}]]:</strong>
                     <span th:text="${reserva.cliente.nombre}"></span>
                 </p>
 
@@ -37,7 +37,7 @@
                     <div class="mb-3">
 
                         <label for="kilometraje" class="form-label">
-                            Kilometraje
+                            [[#{recepcion.kilometraje}]]
                         </label>
 
                         <input type="number"
@@ -58,7 +58,7 @@
                     <div class="mb-3">
 
                         <label for="nivelCombustible" class="form-label">
-                            Nivel de combustible
+                            [[#{recepcion.combustible}]]
                         </label>
 
                         <select id="nivelCombustible"
@@ -66,12 +66,12 @@
                                 class="form-select"
                                 required>
 
-                            <option value="">Seleccione</option>
-                            <option value="Vacio">Vacío</option>
+                            <option value="" th:text="#{recepcion.seleccione}"></option>
+                            <option value="Vacio" th:text="#{recepcion.vacio}"></option>
                             <option value="1/4">1/4</option>
                             <option value="1/2">1/2</option>
                             <option value="3/4">3/4</option>
-                            <option value="Lleno">Lleno</option>
+                            <option value="Lleno" th:text="#{recepcion.lleno}"></option>
 
                         </select>
 
@@ -86,7 +86,7 @@
                     <div class="mb-3">
 
                         <label for="danosVisibles" class="form-label">
-                            Daños visibles
+                            [[#{recepcion.danos}]]
                         </label>
 
                         <textarea id="danosVisibles"
@@ -94,7 +94,7 @@
                                   class="form-control"
                                   maxlength="255"
                                   rows="3"
-                                  placeholder="Describa los daños visibles"></textarea>
+                                  th:placeholder="#{recepcion.danos.placeholder}"></textarea>
 
                         <div class="text-danger"
                              th:if="${#fields.hasErrors('danosVisibles')}"
@@ -107,7 +107,7 @@
                     <div class="mb-3">
 
                         <label for="objetosPersonales" class="form-label">
-                            Objetos personales
+                            [[#{recepcion.objetos}]]
                         </label>
 
                         <textarea id="objetosPersonales"
@@ -115,7 +115,7 @@
                                   class="form-control"
                                   maxlength="255"
                                   rows="3"
-                                  placeholder="Indique los objetos encontrados"></textarea>
+                                  th:placeholder="#{recepcion.objetos.placeholder}"></textarea>
 
                         <div class="text-danger"
                              th:if="${#fields.hasErrors('objetosPersonales')}"
@@ -128,7 +128,7 @@
                     <div class="mb-3">
 
                         <label for="fallaReportada" class="form-label">
-                            Falla reportada por el cliente
+                            [[#{recepcion.falla}]]
                         </label>
 
                         <textarea id="fallaReportada"
@@ -149,12 +149,12 @@
                     <div class="mt-4">
 
                         <button type="submit" class="af-boton">
-                            Guardar recepción
+                            [[#{recepcion.guardar}]]
                         </button>
 
                         <a th:href="@{/recepcion/con-reserva/{id}(id=${reserva.idReserva})}"
                            class="af-boton">
-                            Volver
+                            [[#{accion.regresar}]]
                         </a>
 
                     </div>
@@ -166,7 +166,7 @@
         </main>
 
         <div class="container pb-3 af-ruta">
-            Recepción / Estado inicial
+            [[#{plantilla.recepcion}]] / [[#{recepcion.ruta.estado}]]
         </div>
 
         <footer th:replace="~{general/fragmentos :: footer}"></footer>

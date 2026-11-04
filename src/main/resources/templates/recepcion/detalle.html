@@ -11,72 +11,72 @@
 
             <section class="af-tarjeta af-orden">
 
-                <h1>Detalle de la reserva</h1>
+                <h1>[[#{recepcion.detalle.titulo}]]</h1>
 
-                <p>Verifique los datos antes de registrar la llegada.</p>
+                <p>[[#{recepcion.detalle.texto}]]</p>
 
-                <h3 class="mt-4">Información de la reserva</h3>
+                <h3 class="mt-4">[[#{recepcion.inforeserva}]]</h3>
 
                 <p>
-                    <strong>Número de reserva:</strong>
+                    <strong>[[#{recepcion.numero}]]:</strong>
                     <span th:text="${reserva.idReserva}"></span>
                 </p>
 
                 <p>
-                    <strong>Estado:</strong>
+                    <strong>[[#{recepcion.estado}]]:</strong>
                     <span th:text="${reserva.estado}"></span>
                 </p>
 
                 <p>
-                    <strong>Fecha:</strong>
+                    <strong>[[#{recepcion.fecha}]]:</strong>
                     <span th:text="${reserva.fecha}"></span>
                 </p>
 
                 <p>
-                    <strong>Horario:</strong>
+                    <strong>[[#{recepcion.horario}]]:</strong>
                     <span th:text="${reserva.horaInicio}"></span>
                     -
                     <span th:text="${reserva.horaFin}"></span>
                 </p>
 
-                <h3 class="mt-4">Datos del cliente</h3>
+                <h3 class="mt-4">[[#{recepcion.datoscliente}]]</h3>
 
                 <p>
-                    <strong>Nombre:</strong>
+                    <strong>[[#{recepcion.nombre}]]:</strong>
                     <span th:text="${reserva.cliente.nombre}"></span>
                 </p>
 
-                <h3 class="mt-4">Datos del vehículo</h3>
+                <h3 class="mt-4">[[#{recepcion.datosvehiculo}]]</h3>
 
                 <p>
-                    <strong>Marca:</strong>
+                    <strong>[[#{recepcion.marca}]]:</strong>
                     <span th:text="${reserva.vehiculo.marca}"></span>
                 </p>
 
                 <p>
-                    <strong>Modelo:</strong>
+                    <strong>[[#{recepcion.modelo}]]:</strong>
                     <span th:text="${reserva.vehiculo.modelo}"></span>
                 </p>
 
                 <p>
-                    <strong>Placa:</strong>
+                    <strong>[[#{recepcion.placa}]]:</strong>
                     <span th:text="${reserva.vehiculo.placa}"></span>
                 </p>
 
                 <p>
-                    <strong>Año:</strong>
+                    <strong>[[#{recepcion.anio}]]:</strong>
                     <span th:text="${reserva.vehiculo.anio}"></span>
                 </p>
 
-                <h3 class="mt-4">Información del servicio</h3>
+                <h3 class="mt-4">[[#{recepcion.infoservicio}]]</h3>
 
                 <p>
-                    <strong>Motivo:</strong>
+                    <strong>[[#{recepcion.motivo}]]:</strong>
                     <span th:text="${reserva.motivo}"></span>
                 </p>
 
                 <p>
-                    <strong>Espacio asignado:</strong>
+                    <strong>[[#{recepcion.espacio}]]:</strong>
                     <span th:text="${reserva.espacio.nombre}"></span>
                 </p>
 
@@ -84,12 +84,12 @@
 
                     <a th:href="@{/recepcion/estado-inicial/{id}(id=${reserva.idReserva})}"
                        class="af-boton">
-                        Confirmar llegada
+                        [[#{recepcion.confirmarllegada}]]
                     </a>
 
                     <a th:href="@{/recepcion/con-reserva}"
                        class="af-boton">
-                        Volver a reservas
+                        [[#{recepcion.volverreservas}]]
                     </a>
 
                 </div>
@@ -99,7 +99,7 @@
         </main>
 
         <div class="container pb-3 af-ruta">
-            Recepción / Con reserva / Detalle
+            [[#{plantilla.recepcion}]] / [[#{recepcion.conreserva}]] / [[#{recepcion.ruta.detalle}]]
         </div>
 
         <footer th:replace="~{general/fragmentos :: footer}"></footer>

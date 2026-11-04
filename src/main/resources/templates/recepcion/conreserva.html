@@ -11,63 +11,60 @@
 
     <section class="af-tarjeta af-orden">
 
-        <h1>Recepción con reserva</h1>
+        <h1>[[#{recepcion.con.titulo}]]</h1>
 
-        <p>Buscar reserva del vehículo</p>
+        <p>[[#{recepcion.con.texto}]]</p>
 
         <form th:action="@{/recepcion/con-reserva}" method="get">
 
             <div class="mb-3">
                 <label class="form-label">
-                    Nombre del cliente o placa
+                    [[#{recepcion.nombreplaca}]]
                 </label>
 
                 <input type="text"
                        name="busqueda"
                        class="form-control"
                        th:value="${busqueda}"
-                       placeholder="Ingrese nombre o placa">
+                       th:placeholder="#{recepcion.con.placeholder}">
             </div>
 
             <button type="submit" class="af-boton">
-                Buscar reserva
+                [[#{recepcion.buscarreserva}]]
             </button>
 
         </form>
 
-        <h3 class="mt-4">Reservas encontradas</h3>
+        <h3 class="mt-4">[[#{recepcion.reservasencontradas}]]</h3>
 
         <p th:if="${#lists.isEmpty(reservas)}">
-            No se encontraron reservas pendientes.
+            [[#{recepcion.sinreservas}]]
         </p>
 
         <article class="af-mecanico"
                  th:each="reserva : ${reservas}">
 
             <div>
-                <strong th:text="${'Reserva #' + reserva.idReserva}">
-                </strong>
+                <strong>[[#{recepcion.reserva}]] #[[${reserva.idReserva}]]</strong>
 
                 <p th:text="${reserva.cliente.nombre}">
                 </p>
 
-                <p th:text="${'Placa: ' + reserva.vehiculo.placa}">
-                </p>
+                <p>[[#{recepcion.placa}]]: [[${reserva.vehiculo.placa}]]</p>
 
-                <small th:text="${'Fecha: ' + reserva.fecha}">
-                </small>
+                <small>[[#{recepcion.fecha}]]: [[${reserva.fecha}]]</small>
             </div>
 
             <a class="af-seleccionar"
                th:href="@{/recepcion/con-reserva/{id}(id=${reserva.idReserva})}">
-                Seleccionar
+                [[#{accion.seleccionar}]]
             </a>
 
         </article>
 
         <div class="mt-4">
             <a th:href="@{/recepcion/listado}">
-                Volver a recepción
+                [[#{recepcion.volverrecepcion}]]
             </a>
         </div>
 
@@ -76,7 +73,7 @@
 </main>
 
 <div class="container pb-3 af-ruta">
-    Recepción / Con reserva
+    [[#{plantilla.recepcion}]] / [[#{recepcion.conreserva}]]
 </div>
 
 <footer th:replace="~{general/fragmentos :: footer}"></footer>

@@ -5,7 +5,7 @@
     --af-azul-claro: #eaf2ff;  /* fondo de los botones al pasar el mouse */
 }
 
-/* HU16: asignación y seguimiento de órdenes */
+/* HU16: asignacion y seguimiento de ordenes */
 .af-hu16 { display: flex; justify-content: center; align-items: center; padding-block: 1.5rem 3rem; }
 .af-orden { width: 100%; max-width: 540px; color: #3678d9; border-radius: 28px; padding: 24px; font-size: 1.1rem; font-weight: 500; }
 .af-orden h1, .af-volver { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.25rem; }
@@ -138,6 +138,8 @@ main {
     color: var(--af-azul);
 }
 
+.af-pill.disabled { opacity: .5; pointer-events: none; cursor: not-allowed; }
+
 /* Tarjetas para formularios y tablas */
 .af-tarjeta {
     background: #fff;
@@ -175,7 +177,7 @@ main {
 .af-servicio-nombre { display: inline-block; border-radius: 24px; padding: .3rem .8rem; background: #599afa; color: white; }
 @media (max-width: 575px) { .af-linea-servicio { grid-template-columns: 1fr 1fr; } .af-linea-servicio label:first-child { grid-column: 1 / -1; } }
 
-/* HU-R14: diagnóstico técnico */
+/* HU-R14: diagnostico tecnico */
 .af-diagnostico { max-width: 860px; padding: 28px; }
 .af-filtro-diagnostico { display: flex; gap: .75rem; margin: 1.5rem 0; }
 .af-filtro-diagnostico input { border-radius: 30px; background: #599afa; color: #fff; padding: .7rem 1.3rem; }
