@@ -91,4 +91,5 @@ AutoFlow reúne en una sola aplicación web las actividades de un taller automot
 
 - **Foto de fondo del taller:** Autor: Mike van Schoonderwalt. Fuente: [Pexels](https://www.pexels.com/photo/engine-parts-on-shelves-in-car-workshop-5506059/). Licencia: Pexels License (uso libre).
 - **Prototipo de diseño:** Figma del equipo.
+- **Video Evidencia Avance2:** https://ufidelitas-my.sharepoint.com/:v:/r/personal/eflores80385_ufide_ac_cr/_layouts/15/stream.aspx?id=%2Fpersonal%2Feflores80385_ufide_ac_cr%2FDocuments%2FProyecto%20-%20Desarrollo%20de%20Aplicaciones%20Web%20y%20Patrones%2FAvance%202%2FEvidencia_Avance2_G1.mp4&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&share=cQrsa1IIuxRbTI9gC-G6OwNfEgUC9Xup03wI-RCkj0Amgu7KCA
 
