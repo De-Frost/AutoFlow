@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+        <main class="container py-4">
+            <div class="af-login">
+                <h1 class="af-login-titulo">[[#{login.titulo}]]</h1>
+                <div class="af-logo af-login-logo"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+
+                <!-- Spring Security recibe usuario y contrasena en /login -->
+                <form class="af-login-tarjeta" th:action="@{/login}" method="post">
+                    <h2 class="af-login-subtitulo">[[#{login.subtitulo}]]</h2>
+
+                    <div th:if="${param.error}" class="alert alert-danger rounded-pill py-2" role="alert">
+                        <i class="fa-solid fa-triangle-exclamation"></i> [[#{login.error}]]</div>
+                    <div th:if="${param.logout}" class="alert alert-success rounded-pill py-2" role="status">
+                        <i class="fa-solid fa-circle-check"></i> [[#{login.salio}]]</div>
+
+                    <div class="af-login-campo">
+                        <input type="text" name="username" class="form-control rounded-pill"
+                               maxlength="50" required="true" autofocus="autofocus" autocomplete="username"
+                               th:placeholder="#{login.usuario}" th:aria-label="#{login.usuario}"/>
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="af-login-campo">
+                        <input type="password" name="password" class="form-control rounded-pill"
+                               maxlength="100" required="true" autocomplete="current-password"
+                               th:placeholder="#{login.password}" th:aria-label="#{login.password}"/>
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+
+                    <button type="submit" class="af-pill border-0 mt-4">[[#{login.entrar}]]</button>
+                </form>
+
+                <!-- Cambio de idioma -->
+                <p class="af-login-idiomas">
+                    <a th:href="@{/login(lang=es)}">Español</a> ·
+                    <a th:href="@{/login(lang=en)}">English</a> ·
+                    <a th:href="@{/login(lang=pt)}">Português</a>
+                </p>
+            </div>
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+    </body>
+</html>
