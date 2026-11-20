@@ -1,185 +1,75 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-
-    <head th:replace="~{general/fragmentos :: head}"></head>
-
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
     <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
 
-        <header th:replace="~{general/fragmentos :: header}"></header>
-
-        <main class="container af-hu16">
-
-            <section class="af-tarjeta af-orden">
-
-                <h1>[[#{recepcion.estadoinicial}]]</h1>
-
-                <p>
-                    [[#{recepcion.estadotextosin}]]
-                </p>
-
-                <h3 class="mt-4">[[#{recepcion.infovehiculo}]]</h3>
-
-                <p>
-                    <strong>[[#{recepcion.placa}]]:</strong>
-                    <span th:text="${vehiculo.placa}"></span>
-                </p>
-
-                <p>
-                    <strong>[[#{recepcion.marca}]]:</strong>
-                    <span th:text="${vehiculo.marca}"></span>
-                </p>
-
-                <p>
-                    <strong>[[#{recepcion.modelo}]]:</strong>
-                    <span th:text="${vehiculo.modelo}"></span>
-                </p>
-
-                <p>
-                    <strong>[[#{recepcion.cliente}]]:</strong>
-                    <span th:text="${vehiculo.cliente.nombre}"></span>
-                </p>
-
-                <form th:action="@{/recepcion/guardar-sin-reserva/{id}(id=${vehiculo.idVehiculo})}"
-                      th:object="${recepcion}"
-                      method="post">
-
-                    <!-- Kilometraje -->
+        <main>
+            <section class="container py-3">
+                <div class="af-tarjeta mx-auto" style="max-width: 760px;">
                     <div class="mb-3">
+                        <a th:href="@{/recepcion/sin-reserva}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]</a>
+                    </div>
+                    <h1 class="af-tarjeta-titulo h4 mb-2">[[#{recepcion.estadoinicial}]]</h1>
+                    <p>[[#{recepcion.estadotextosin}]]</p>
 
-                        <label for="kilometraje" class="form-label">
-                            [[#{recepcion.kilometraje}]]
-                        </label>
+                    <h2 class="h6 text-uppercase text-primary mt-4">[[#{recepcion.infovehiculo}]]</h2>
+                    <div class="row row-cols-1 row-cols-sm-2 g-1 mb-3">
+                        <div class="col"><strong>[[#{recepcion.placa}]]:</strong> [[${vehiculo.placa}]]</div>
+                        <div class="col"><strong>[[#{recepcion.marca}]]:</strong> [[${vehiculo.marca}]]</div>
+                        <div class="col"><strong>[[#{recepcion.modelo}]]:</strong> [[${vehiculo.modelo}]]</div>
+                        <div class="col"><strong>[[#{recepcion.cliente}]]:</strong> [[${vehiculo.cliente.nombre}]]</div>
+                    </div>
 
-                        <input type="number"
-                               id="kilometraje"
-                               th:field="*{kilometraje}"
-                               class="form-control"
-                               min="0"
-                               required>
-
-                        <div class="text-danger"
-                             th:if="${#fields.hasErrors('kilometraje')}"
-                             th:errors="*{kilometraje}">
+                    <form th:action="@{/recepcion/guardar-sin-reserva/{id}(id=${vehiculo.idVehiculo})}" th:object="${recepcion}" method="post">
+                        <div class="mb-3">
+                            <label for="kilometraje" class="form-label">[[#{recepcion.kilometraje}]]</label>
+                            <input type="number" id="kilometraje" th:field="*{kilometraje}" class="form-control" min="0" required="true"/>
+                            <div class="text-danger" th:if="${#fields.hasErrors('kilometraje')}" th:errors="*{kilometraje}"></div>
                         </div>
-
-                    </div>
-
-                    <!-- Nivel de combustible -->
-                    <div class="mb-3">
-
-                        <label for="nivelCombustible" class="form-label">
-                            [[#{recepcion.combustible}]]
-                        </label>
-
-                        <select id="nivelCombustible"
-                                th:field="*{nivelCombustible}"
-                                class="form-select"
-                                required>
-
-                            <option value="" th:text="#{recepcion.seleccione}"></option>
-                            <option value="Vacio" th:text="#{recepcion.vacio}"></option>
-                            <option value="1/4">1/4</option>
-                            <option value="1/2">1/2</option>
-                            <option value="3/4">3/4</option>
-                            <option value="Lleno" th:text="#{recepcion.lleno}"></option>
-
-                        </select>
-
-                        <div class="text-danger"
-                             th:if="${#fields.hasErrors('nivelCombustible')}"
-                             th:errors="*{nivelCombustible}">
+                        <div class="mb-3">
+                            <label for="nivelCombustible" class="form-label">[[#{recepcion.combustible}]]</label>
+                            <select id="nivelCombustible" th:field="*{nivelCombustible}" class="form-select" required="true">
+                                <option value="" th:text="#{recepcion.seleccione}"></option>
+                                <option value="Vacio" th:text="#{recepcion.vacio}"></option>
+                                <option value="1/4">1/4</option>
+                                <option value="1/2">1/2</option>
+                                <option value="3/4">3/4</option>
+                                <option value="Lleno" th:text="#{recepcion.lleno}"></option>
+                            </select>
+                            <div class="text-danger" th:if="${#fields.hasErrors('nivelCombustible')}" th:errors="*{nivelCombustible}"></div>
                         </div>
-
-                    </div>
-
-                    <!-- Daños visibles -->
-                    <div class="mb-3">
-
-                        <label for="danosVisibles" class="form-label">
-                            [[#{recepcion.danos}]]
-                        </label>
-
-                        <textarea id="danosVisibles"
-                                  th:field="*{danosVisibles}"
-                                  class="form-control"
-                                  maxlength="255"
-                                  rows="3"
-                                  th:placeholder="#{recepcion.danos.placeholder}"></textarea>
-
-                        <div class="text-danger"
-                             th:if="${#fields.hasErrors('danosVisibles')}"
-                             th:errors="*{danosVisibles}">
+                        <div class="mb-3">
+                            <label for="danosVisibles" class="form-label">[[#{recepcion.danos}]]</label>
+                            <textarea id="danosVisibles" th:field="*{danosVisibles}" class="form-control" maxlength="255" rows="3"
+                                      th:placeholder="#{recepcion.danos.placeholder}"></textarea>
+                            <div class="text-danger" th:if="${#fields.hasErrors('danosVisibles')}" th:errors="*{danosVisibles}"></div>
                         </div>
-
-                    </div>
-
-                    <!-- Objetos personales -->
-                    <div class="mb-3">
-
-                        <label for="objetosPersonales" class="form-label">
-                            [[#{recepcion.objetos}]]
-                        </label>
-
-                        <textarea id="objetosPersonales"
-                                  th:field="*{objetosPersonales}"
-                                  class="form-control"
-                                  maxlength="255"
-                                  rows="3"
-                                  th:placeholder="#{recepcion.objetos.placeholder}"></textarea>
-
-                        <div class="text-danger"
-                             th:if="${#fields.hasErrors('objetosPersonales')}"
-                             th:errors="*{objetosPersonales}">
+                        <div class="mb-3">
+                            <label for="objetosPersonales" class="form-label">[[#{recepcion.objetos}]]</label>
+                            <textarea id="objetosPersonales" th:field="*{objetosPersonales}" class="form-control" maxlength="255" rows="3"
+                                      th:placeholder="#{recepcion.objetos.placeholder}"></textarea>
+                            <div class="text-danger" th:if="${#fields.hasErrors('objetosPersonales')}" th:errors="*{objetosPersonales}"></div>
                         </div>
-
-                    </div>
-
-                    <!-- Falla reportada -->
-                    <div class="mb-3">
-
-                        <label for="fallaReportada" class="form-label">
-                            [[#{recepcion.falla}]]
-                        </label>
-
-                        <textarea id="fallaReportada"
-                                  th:field="*{fallaReportada}"
-                                  class="form-control"
-                                  maxlength="255"
-                                  rows="3"
-                                  required></textarea>
-
-                        <div class="text-danger"
-                             th:if="${#fields.hasErrors('fallaReportada')}"
-                             th:errors="*{fallaReportada}">
+                        <div class="mb-3">
+                            <label for="fallaReportada" class="form-label">[[#{recepcion.falla}]]</label>
+                            <textarea id="fallaReportada" th:field="*{fallaReportada}" class="form-control" maxlength="255" rows="3" required="true"></textarea>
+                            <div class="text-danger" th:if="${#fields.hasErrors('fallaReportada')}" th:errors="*{fallaReportada}"></div>
                         </div>
-
-                    </div>
-
-                    <!-- Botones -->
-                    <div class="mt-4">
-
-                        <button type="submit" class="af-boton">
-                            [[#{recepcion.guardar}]]
-                        </button>
-
-                        <a th:href="@{/recepcion/sin-reserva}"
-                           class="af-boton">
-                            [[#{accion.regresar}]]
-                        </a>
-
-                    </div>
-
-                </form>
-
+                        <div class="d-flex gap-2 justify-content-end">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-check"></i> [[#{recepcion.guardar}]]</button>
+                        </div>
+                    </form>
+                </div>
             </section>
-
         </main>
 
-        <div class="container pb-3 af-ruta">
-            [[#{plantilla.recepcion}]] / [[#{recepcion.sinreserva}]] / [[#{recepcion.ruta.estado}]]
-        </div>
+        <!-- Nombre de la seccion -->
+        <div class="container pb-3"><span class="af-ruta">[[#{plantilla.recepcion}]] / [[#{recepcion.sinreserva}]] / [[#{recepcion.ruta.estado}]]</span></div>
 
-        <footer th:replace="~{general/fragmentos :: footer}"></footer>
-
+        <footer th:replace="~{general/fragmentos :: footer}"/>
     </body>
 </html>
