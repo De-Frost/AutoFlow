@@ -20,22 +20,22 @@ public class Cliente implements Serializable {
     private Integer idCliente;
 
     @Column(unique = true, nullable = false, length = 20)
-    @NotBlank(message = "La identificacion es obligatoria")
+    @NotBlank(message = "{cliente.valid01}")
     @Size(max = 20)
     private String identificacion;
 
     @Column(nullable = false, length = 100)
-    @NotBlank(message = "El nombre es obligatorio")
+    @NotBlank(message = "{cliente.valid02}")
     @Size(max = 100)
     private String nombre;
 
     @Column(nullable = false, length = 20)
-    @NotBlank(message = "El telefono es obligatorio")
+    @NotBlank(message = "{cliente.valid03}")
     @Size(max = 20)
     private String telefono;
 
     @Column(length = 75)
-    @Email(message = "El correo no tiene un formato valido")
+    @Email(message = "{cliente.valid04}")
     @Size(max = 75)
     private String correo;
 
