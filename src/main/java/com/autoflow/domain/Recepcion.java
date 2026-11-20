@@ -23,12 +23,12 @@ public class Recepcion implements Serializable {
     @Column(nullable = false)
     private LocalDateTime fechaIngreso = LocalDateTime.now();
 
-    @NotNull(message = "El kilometraje es obligatorio")
-    @Min(value = 0, message = "El kilometraje no puede ser negativo")
+    @NotNull(message = "{recepcion.valid01}")
+    @Min(value = 0, message = "{recepcion.valid02}")
     private Integer kilometraje;
 
     @Column(nullable = false, length = 20)
-    @NotBlank(message = "El nivel de combustible es obligatorio")
+    @NotBlank(message = "{recepcion.valid03}")
     @Size(max = 20)
     private String nivelCombustible;
 
@@ -41,7 +41,7 @@ public class Recepcion implements Serializable {
     private String objetosPersonales;
 
     @Column(nullable = false, length = 255)
-    @NotBlank(message = "La falla reportada es obligatoria")
+    @NotBlank(message = "{recepcion.valid04}")
     @Size(max = 255)
     private String fallaReportada;
 

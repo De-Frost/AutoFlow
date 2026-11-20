@@ -5,6 +5,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -14,15 +16,15 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 
 @Configuration
 public class ProjectConfig implements WebMvcConfigurer {
-    
+
     //Paginas que no necesitan un controlador propio
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("index");
         registry.addViewController("/servicios").setViewName("servicios");
+        registry.addViewController("/login").setViewName("login");
     }
-    
-    
+
     //El idioma elegido (español por defecto)
     @Bean
     public LocaleResolver localeResolver() {
@@ -53,5 +55,13 @@ public class ProjectConfig implements WebMvcConfigurer {
         messageSource.setBasename("messages");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
+    }
+
+    //Los mensajes de validacion tambien salen de messages*.properties
+    @Override
+    public Validator getValidator() {
+        var validador = new LocalValidatorFactoryBean();
+        validador.setValidationMessageSource(messageSource());
+        return validador;
     }
 }

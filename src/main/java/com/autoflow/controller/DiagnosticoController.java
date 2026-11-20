@@ -25,11 +25,11 @@ public class DiagnosticoController {
 
     @Getter @Setter
     public static class Formulario {
-        @NotBlank(message = "Las fallas encontradas son obligatorias.")
-        @Size(max = 10000, message = "Ingrese como máximo 10000 caracteres.")
+        @NotBlank(message = "{diagnostico.error03}")
+        @Size(max = 10000, message = "{diagnostico.error05}")
         private String fallasEncontradas;
-        @NotBlank(message = "Los trabajos necesarios son obligatorios.")
-        @Size(max = 10000, message = "Ingrese como máximo 10000 caracteres.")
+        @NotBlank(message = "{diagnostico.error04}")
+        @Size(max = 10000, message = "{diagnostico.error06}")
         private String trabajosNecesarios;
     }
 
