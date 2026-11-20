@@ -17,6 +17,8 @@ public interface OrdenServicioRepository extends JpaRepository<OrdenServicio, In
 
     public long countByMecanicoIdUsuarioAndEstadoNot(Integer idMecanico, String estado);
 
+    public long countByMecanicoIdUsuarioAndEstado(Integer idMecanico, String estado);
+
     public List<OrdenServicio> findByEstadoOrderByFechaAsc(String estado);
 
     @Query("SELECT o FROM OrdenServicio o WHERE o.estado = 'Finalizada' AND NOT EXISTS "

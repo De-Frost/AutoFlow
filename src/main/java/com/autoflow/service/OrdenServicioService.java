@@ -25,6 +25,10 @@ public class OrdenServicioService {
         return ordenes.findAllByOrderByFechaDesc();
     }
 
+    public List<OrdenServicio> listarPorMecanico(Integer idMecanico) {
+        return ordenes.findByMecanicoIdUsuarioOrderByFechaDesc(idMecanico);
+    }
+
     public OrdenServicio obtener(Integer id) {
         return ordenes.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("orden.error01"));
@@ -73,6 +77,10 @@ public class OrdenServicioService {
             throw new IllegalArgumentException("orden.error05");
         }
         var orden = obtener(idOrden);
+        //Una orden finalizada ya no se modifica
+        if ("Finalizada".equals(orden.getEstado())) {
+            throw new IllegalArgumentException("orden.error07");
+        }
         if (orden.getMecanico() == null && !"Pendiente".equals(estado)) {
             throw new IllegalArgumentException("orden.error06");
         }
