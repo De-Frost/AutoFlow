@@ -3,6 +3,7 @@
 <head th:replace="~{general/fragmentos :: head}"></head>
 <body><header th:replace="~{general/fragmentos :: header}"></header>
 <main class="container af-hu16"><section class="af-tarjeta af-orden">
+<a class="af-volver" th:href="@{/servicios}">← [[#{accion.regresar}]]</a>
 <h1>[[#{orden.listado}]]</h1>
 <a class="af-boton" th:href="@{/orden/nueva}">[[#{orden.nueva}]]</a>
 <p th:if="${#lists.isEmpty(ordenes)}">[[#{orden.vacio}]]</p>
@@ -10,6 +11,5 @@
 <div><strong>[[#{orden.orden}]] OS-[[${orden.idOrden}]]</strong><p th:text="${orden.diagnostico.recepcion.vehiculo.placa + ' · ' + orden.estado}"></p>
 <small th:text="${orden.mecanico != null} ? ${orden.mecanico.nombre} : #{orden.sinmecanico}"></small></div>
 <a class="af-seleccionar" th:href="@{/orden/{id}(id=${orden.idOrden})}">[[#{orden.ver}]]</a></article>
-<a th:href="@{/servicios}">← [[#{plantilla.servicios}]]</a>
-</section></main><div class="container pb-3 af-ruta">[[#{plantilla.mecanicos}]] / [[#{plantilla.servicios}]]</div>
+</section></main><div class="container pb-3 af-ruta">[[#{plantilla.ordenes}]] / [[#{plantilla.servicios}]]</div>
 <footer th:replace="~{general/fragmentos :: footer}"></footer></body></html>
