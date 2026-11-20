@@ -31,7 +31,7 @@ public class RepuestoController {
         model.addAttribute("repuestos", repuestos);
         model.addAttribute("totalRepuestos", repuestos.size());
         model.addAttribute("buscar", buscar);
-        model.addAttribute("repuesto", new Repuesto()); // Objeto vacío para el modal de agregar
+        model.addAttribute("repuesto", new Repuesto()); //Objeto vacio para el modal de agregar
         return "repuesto/listado";
     }
 

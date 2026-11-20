@@ -20,14 +20,14 @@ public class RecepcionService {
     private final RecepcionRepository recepcionRepository;
     private final VehiculoRepository vehiculoRepository;
 
-    // Buscar reservas pendientes de recepción
+    //Buscar reservas pendientes de recepcion
     public List<Reserva> buscarReservas(String busqueda) {
         return reservaRepository.buscarReservasPendientes(
                 busqueda == null ? "" : busqueda.trim()
         );
     }
 
-    // Obtener una reserva existente
+    //Obtener una reserva existente
     public Reserva obtenerReserva(Integer idReserva) {
         return reservaRepository.findById(idReserva)
                 .orElseThrow(()
@@ -35,7 +35,7 @@ public class RecepcionService {
                 );
     }
 
-    // Comprobar si la reserva puede recibirse
+    //Comprobar si la reserva puede recibirse
     public Reserva validarLlegada(Integer idReserva) {
 
         Reserva reserva = obtenerReserva(idReserva);
@@ -55,7 +55,7 @@ public class RecepcionService {
         return reserva;
     }
 
-    // Registrar recepción con su estado inicial
+    //Registrar recepcion con su estado inicial
     @Transactional
     public Recepcion registrarConReserva(
             Integer idReserva,
