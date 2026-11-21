@@ -3,9 +3,9 @@
 <head th:replace="~{general/fragmentos :: head}"></head>
 <body><header th:replace="~{general/fragmentos :: header}"></header>
 <main class="container af-hu16"><section class="af-tarjeta af-orden">
+<a class="af-volver" th:href="@{/orden/{id}(id=${orden.idOrden})}">← [[#{accion.regresar}]]</a>
 <h1>[[#{orden.actualizartitulo}]]</h1><p>[[#{orden.orden}]] OS-[[${orden.idOrden}]] · [[#{orden.estadoactual}]]: [[${orden.estado}]]</p>
 <form class="af-estados" method="post" th:action="@{/orden/{id}/estado(id=${orden.idOrden})}">
 <button class="af-boton" type="submit" name="estado" th:each="estado : ${estados}" th:value="${estado}" th:text="${estado}" th:attr="aria-pressed=${estado == orden.estado}"></button></form>
-<a th:href="@{/orden/{id}(id=${orden.idOrden})}">← [[#{orden.volver}]]</a>
-</section></main><div class="container pb-3 af-ruta">[[#{plantilla.mecanicos}]] / [[#{plantilla.servicios}]]</div>
+</section></main><div class="container pb-3 af-ruta">[[#{plantilla.ordenes}]] / [[#{plantilla.servicios}]]</div>
 <footer th:replace="~{general/fragmentos :: footer}"></footer></body></html>

@@ -15,9 +15,11 @@ public class OrdenServicioController {
     private final OrdenServicioService servicio;
     private final MessageSource messageSource;
 
-    @GetMapping({"/orden/listado", "/orden/seguimiento", "/mecanico/listado"})
-    public String listado(Model model) {
-        model.addAttribute("ordenes", servicio.listar());
+    @GetMapping("/orden/listado")
+    public String listado(@RequestParam(required = false) Integer mecanico, Model model) {
+        //Con mecanico filtra sus ordenes, sin el muestra todas
+        model.addAttribute("ordenes", mecanico != null
+                ? servicio.listarPorMecanico(mecanico) : servicio.listar());
         return "orden/listado";
     }
 

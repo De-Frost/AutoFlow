@@ -37,7 +37,7 @@ public class FacturaController {
         try {
             OrdenServicio orden = facturaService.getOrdenFacturable(idOrden);
             cargarDetalle(model, orden);
-            // Sin atributo "factura": la vista muestra la vista previa con el botón Generar
+            //Sin atributo "factura": la vista muestra la vista previa con el boton Generar
             return "factura/factura";
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("error", messageSource.getMessage(e.getMessage(), null, locale));

@@ -8,8 +8,9 @@
     }
     agregar.addEventListener('click', agregarLinea);
     lineas.addEventListener('click', event => {
-        if (event.target.classList.contains('af-quitar') && lineas.children.length > 1) {
-            event.target.closest('.af-linea-servicio').remove();
+        const quitar = event.target.closest('.af-quitar');
+        if (quitar && lineas.children.length > 1) {
+            quitar.closest('.af-linea-servicio').remove();
             agregar.disabled = false;
         }
     });

@@ -187,3 +187,16 @@ main {
 .af-campo-diagnostico textarea { display: block; width: 100%; background: transparent; color: #fff; border: 0; resize: vertical; min-height: 70px; padding: .4rem 0; }
 .af-campo-diagnostico textarea:focus-visible { outline: 2px solid white; outline-offset: 3px; border-radius: 4px; }
 @media (max-width: 575px) { .af-diagnostico { padding: 20px; } .af-filtro-diagnostico { flex-wrap: wrap; } }
+
+/* Inicio de sesion */
+.af-login { max-width: 440px; margin: 0 auto; text-align: center; }
+.af-login-titulo { display: inline-block; margin: 0; padding: .45rem 2rem; border-radius: 50rem; background: #fff; color: var(--af-azul); font-size: 1.4rem; font-weight: 700; box-shadow: 0 2px 8px rgba(0, 0, 0, .3); }
+.af-login-logo { width: 120px; height: 120px; margin: 1rem auto -3.75rem; position: relative; z-index: 1; font-size: 3.5rem; }
+.af-login-tarjeta { padding: 5rem 2rem 2.5rem; border-radius: 1.75rem; background: rgba(47, 111, 208, .85); box-shadow: 0 4px 14px rgba(0, 0, 0, .3); }
+.af-login-subtitulo { display: inline-block; margin: 0 0 1.5rem; padding: .35rem 1.75rem; border-radius: 50rem; background: #fff; color: var(--af-azul); font-size: 1.15rem; font-weight: 600; }
+.af-login-campo { position: relative; max-width: 300px; margin: 0 auto 1rem; }
+.af-login-campo input { padding-right: 2.75rem; background: rgba(255, 255, 255, .85); }
+.af-login-campo i { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--af-azul); pointer-events: none; }
+.af-login-tarjeta .af-pill { max-width: 220px; margin-inline: auto; cursor: pointer; }
+.af-login-idiomas { margin-top: 1rem; color: #fff; text-shadow: 0 1px 4px rgba(0, 0, 0, .7); }
+.af-login-idiomas a { color: #fff; }

@@ -60,7 +60,7 @@ public class RecepcionController {
             model.addAttribute("reserva", reserva);
             return "recepcion/detalle";
         } catch (IllegalArgumentException e) {
-            // Reserva cancelada o que ya fue recibida: se vuelve a la busqueda con el aviso
+            //Reserva cancelada o que ya fue recibida: se vuelve a la busqueda con el aviso
             redirectAttributes.addFlashAttribute("error",
                     messageSource.getMessage(e.getMessage(), null, locale));
             return "redirect:/recepcion/con-reserva";

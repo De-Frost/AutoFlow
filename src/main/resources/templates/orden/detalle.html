@@ -14,6 +14,6 @@
 <h2>[[#{orden.mecanico}]]</h2><p th:text="${orden.mecanico != null} ? ${orden.mecanico.nombre} : #{orden.sinasignar}"></p>
 <a th:href="@{/orden/{id}/servicios(id=${orden.idOrden})}">[[#{orden.verservicios}]]</a>
 <div class="af-acciones"><a class="af-boton" th:if="${orden.estado != 'Finalizada'}" th:href="@{/orden/{id}/mecanicos(id=${orden.idOrden})}" th:text="${orden.mecanico != null} ? #{orden.cambiarmecanico} : #{orden.asignarmecanico}"></a>
-<a class="af-boton" th:href="@{/orden/{id}/estado(id=${orden.idOrden})}">[[#{orden.actualizarestado}]]</a></div>
-</section></main><div class="container pb-3 af-ruta">[[#{plantilla.seguimiento}]]</div>
+<a class="af-boton" th:if="${orden.estado != 'Finalizada'}" th:href="@{/orden/{id}/estado(id=${orden.idOrden})}">[[#{orden.actualizarestado}]]</a></div>
+</section></main><div class="container pb-3 af-ruta">[[#{plantilla.ordenes}]] / [[#{plantilla.servicios}]]</div>
 <footer th:replace="~{general/fragmentos :: footer}"></footer></body></html>

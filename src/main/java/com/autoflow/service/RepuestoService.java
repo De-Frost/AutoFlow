@@ -17,7 +17,7 @@ public class RepuestoService {
 
     @Transactional(readOnly = true)
     public List<Repuesto> getRepuestos(boolean activo) {
-        if (activo) { //Sólo activos...
+        if (activo) { //Solo activos...
             return repuestoRepository.findByActivoTrue();
         }
         return repuestoRepository.findAll();

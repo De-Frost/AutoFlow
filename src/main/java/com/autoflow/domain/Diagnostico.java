@@ -35,7 +35,7 @@ public class Diagnostico implements Serializable {
     @JoinColumn(name = "id_recepcion", nullable = false, unique = true)
     private Recepcion recepcion;
 
-    // Mecánico que registró el diagnóstico
+    //Mecanico que registro el diagnostico
     @ManyToOne
     @JoinColumn(name = "id_mecanico")
     private Usuario mecanico;

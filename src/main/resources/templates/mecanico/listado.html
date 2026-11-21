@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+
+        <main>
+            <section class="container py-3">
+                <div class="af-tarjeta">
+                    <div class="mb-3">
+                        <a th:href="@{/servicios}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]</a>
+                    </div>
+                    <h1 class="af-tarjeta-titulo h4 mb-3">
+                        [[#{mecanico.listado}]]
+                        <span class="badge text-bg-primary">[[${#lists.size(mecanicos)}]]</span>
+                    </h1>
+
+                    <div th:if="${!#lists.isEmpty(mecanicos)}" class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>[[#{mecanico.nombre}]]</th>
+                                    <th>[[#{orden.estado}]]</th>
+                                    <th class="text-end">[[#{mecanico.encurso}]]</th>
+                                    <th class="text-end">[[#{mecanico.finalizadas}]]</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="m : ${mecanicos}">
+                                    <td class="fw-semibold">[[${m.nombre}]]</td>
+                                    <td>
+                                        <span th:if="${m.activo}" class="badge text-bg-success">[[#{texto.activo}]]</span>
+                                        <span th:unless="${m.activo}" class="badge text-bg-secondary">[[#{texto.inactivo}]]</span>
+                                    </td>
+                                    <td class="text-end">[[${m.enCurso}]]</td>
+                                    <td class="text-end">[[${m.finalizadas}]]</td>
+                                    <td class="text-nowrap text-end">
+                                        <a th:href="@{/orden/listado(mecanico=${m.id})}" class="btn btn-primary btn-sm">
+                                            <i class="fa-solid fa-eye"></i> [[#{mecanico.verordenes}]]</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center p-2" th:if="${#lists.isEmpty(mecanicos)}">
+                        <span>[[#{mecanico.vacio}]]</span></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Nombre de la seccion -->
+        <div class="container pb-3"><span class="af-ruta">[[#{mecanico.ruta}]]</span></div>
+
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+    </body>
+</html>

@@ -1,18 +1,62 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{general/fragmentos :: head}"></head>
-<body><header th:replace="~{general/fragmentos :: header}"></header>
-<main class="container af-hu16"><section class="af-tarjeta af-orden af-diagnostico">
-<h1>[[#{diagnostico.pendientes}]]</h1><p>[[#{diagnostico.pendientes.texto}]]</p>
-<form method="get" th:action="@{/diagnostico/listado}" class="af-filtro-diagnostico" role="search">
-<label class="visually-hidden" for="busqueda">[[#{diagnostico.buscar}]]</label>
-<input class="form-control" id="busqueda" name="busqueda" type="search" th:placeholder="#{diagnostico.buscar.placeholder}" th:value="${busqueda}"/>
-<button class="af-boton" type="submit">[[#{accion.buscar}]]</button></form>
-<p class="my-4" th:if="${#lists.isEmpty(recepciones)}" role="status">[[#{diagnostico.sinresultados}]]</p>
-<div class="table-responsive" th:unless="${#lists.isEmpty(recepciones)}"><table class="table af-tabla-servicios">
-<thead><tr><th>[[#{diagnostico.placa}]]</th><th>[[#{diagnostico.cliente}]]</th><th>[[#{diagnostico.recepcion}]]</th><th><span class="visually-hidden">[[#{diagnostico.accion}]]</span></th></tr></thead>
-<tbody><tr th:each="r : ${recepciones}"><td th:text="${r.vehiculo.placa}"></td><td th:text="${r.vehiculo.cliente.nombre}"></td>
-<td th:text="${'REC-' + r.idRecepcion}"></td><td><a class="af-boton" th:href="@{/diagnostico/registrar/{id}(id=${r.idRecepcion})}" th:aria-label="|#{diagnostico.registrarde} ${r.vehiculo.placa}|">[[#{accion.siguiente}]]</a></td></tr></tbody></table></div>
-<a th:href="@{/servicios}">← [[#{plantilla.servicios}]]</a>
-</section></main><div class="container pb-3 af-ruta">[[#{diagnostico.ruta}]]</div>
-<footer th:replace="~{general/fragmentos :: footer}"></footer></body></html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+
+        <main>
+            <section class="container py-3">
+                <div class="af-tarjeta">
+                    <div class="mb-3">
+                        <a th:href="@{/servicios}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]</a>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <h1 class="af-tarjeta-titulo h4 m-0 me-auto">[[#{diagnostico.pendientes}]]</h1>
+                        <!-- Busqueda por placa o cliente -->
+                        <form th:action="@{/diagnostico/listado}" method="get" class="d-flex gap-2" role="search">
+                            <input type="search" name="busqueda" th:value="${busqueda}" class="form-control"
+                                   th:placeholder="#{diagnostico.buscar.placeholder}" th:aria-label="#{diagnostico.buscar}"/>
+                            <button type="submit" class="btn btn-outline-primary" th:aria-label="#{accion.buscar}">
+                                <i class="fa-solid fa-magnifying-glass"></i></button>
+                        </form>
+                    </div>
+                    <p>[[#{diagnostico.pendientes.texto}]]</p>
+
+                    <div class="table-responsive" th:if="${!#lists.isEmpty(recepciones)}">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>[[#{diagnostico.placa}]]</th>
+                                    <th>[[#{diagnostico.cliente}]]</th>
+                                    <th>[[#{diagnostico.recepcion}]]</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="r : ${recepciones}">
+                                    <td class="fw-semibold">[[${r.vehiculo.placa}]]</td>
+                                    <td>[[${r.vehiculo.cliente.nombre}]]</td>
+                                    <td>REC-[[${r.idRecepcion}]]</td>
+                                    <td class="text-nowrap text-end">
+                                        <a th:href="@{/diagnostico/registrar/{id}(id=${r.idRecepcion})}" class="btn btn-primary btn-sm"
+                                           th:aria-label="|#{diagnostico.registrarde} ${r.vehiculo.placa}|">
+                                            <i class="fas fa-arrow-right"></i> [[#{accion.siguiente}]]</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center p-2" th:if="${#lists.isEmpty(recepciones)}" role="status">
+                        <span>[[#{diagnostico.sinresultados}]]</span></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Nombre de la seccion -->
+        <div class="container pb-3"><span class="af-ruta">[[#{diagnostico.ruta}]]</span></div>
+
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+    </body>
+</html>

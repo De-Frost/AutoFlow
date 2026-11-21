@@ -27,13 +27,13 @@ public class MovimientoService {
     private final RepuestoRepository repuestoRepository;
     private final OrdenServicioRepository ordenRepository;
 
-    // Historial de entradas y salidas del inventario
+    //Historial de entradas y salidas del inventario
     @Transactional(readOnly = true)
     public List<MovimientoInventario> getMovimientos() {
         return movimientoRepository.findAllByOrderByFechaDesc();
     }
 
-    // Órdenes a las que todavía se les pueden cargar repuestos: las que no están Finalizadas
+    //Ordenes a las que todavia se les pueden cargar repuestos: las que no estan Finalizadas
     @Transactional(readOnly = true)
     public List<OrdenServicio> getOrdenesAbiertas() {
         List<OrdenServicio> abiertas = new ArrayList<>();
