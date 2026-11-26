@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -79,6 +80,43 @@ public class ReservaController {
             mensaje = e.getMessage();
         }
         redirectAttributes.addFlashAttribute(titulo, messageSource.getMessage(mensaje, null, locale));
+        return "redirect:/reserva/listado";
+    }
+
+    //HU-R04: Formulario para modificar una reserva
+    @GetMapping("/modificar/{idReserva}")
+    public String modificar(@PathVariable("idReserva") Integer idReserva, Model model,
+            RedirectAttributes redirectAttributes, Locale locale) {
+        var reserva = reservaService.getReserva(idReserva);
+        if (reserva.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", messageSource.getMessage("reserva.error05", null, locale));
+            return "redirect:/reserva/listado";
+        }
+        if (!reservaService.esModificable(reserva.get())) {
+            redirectAttributes.addFlashAttribute("error", messageSource.getMessage("reserva.error09", null, locale));
+            return "redirect:/reserva/listado";
+        }
+        model.addAttribute("reserva", reserva.get());
+        model.addAttribute("espacios", reservaService.getEspaciosActivos());
+        return "reserva/modifica";
+    }
+
+    //HU-R04: Guardar la modificacion
+    @PostMapping("/actualizar")
+    public String actualizar(@Valid Reserva reserva, BindingResult bindingResult,
+            RedirectAttributes redirectAttributes, Locale locale) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", messageSource.getMessage("reserva.error01", null, locale));
+            return "redirect:/reserva/modificar/" + reserva.getIdReserva();
+        }
+        try {
+            reservaService.modificar(reserva);
+        } catch (IllegalArgumentException e) {
+            //Se vuelve al formulario con los datos originales y el motivo del rechazo
+            redirectAttributes.addFlashAttribute("error", messageSource.getMessage(e.getMessage(), null, locale));
+            return "redirect:/reserva/modificar/" + reserva.getIdReserva();
+        }
+        redirectAttributes.addFlashAttribute("todoOk", messageSource.getMessage("reserva.exitoModificar", null, locale));
         return "redirect:/reserva/listado";
     }
 }
