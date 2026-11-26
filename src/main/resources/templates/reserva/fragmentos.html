@@ -65,7 +65,10 @@
                             <span th:if="${r.estado == 'Cancelada'}" class="badge text-bg-secondary"
                                   th:title="${r.motivoCancelacion}">[[#{reserva.cancelada}]]</span>
                         </td>
-                        <td class="text-end">
+                        <td class="text-end text-nowrap">
+                            <a th:if="${r.estado == 'Confirmada'}" th:href="@{/reserva/modificar/}+${r.idReserva}"
+                               class="btn btn-warning btn-sm">
+                                <i class="fas fa-pencil-alt"></i> [[#{reserva.modificar}]]</a>
                             <button th:if="${r.estado == 'Confirmada'}" type="button" class="btn btn-danger btn-sm"
                                     data-bs-toggle="modal" data-bs-target="#confirmModal"
                                     th:data-bs-id="${r.idReserva}"
@@ -164,5 +167,52 @@
                 </form>
             </div>
         </div>
+    </div>
+</section>
+
+<!-- HU-R04: Modificar una reserva -->
+<section th:fragment="editar" class="container py-3">
+    <div class="af-tarjeta mx-auto" style="max-width: 640px;">
+        <h1 class="af-tarjeta-titulo h4 mb-3">[[#{reserva.modificar.titulo}]] #[[${reserva.idReserva}]]</h1>
+        <p class="mb-3">
+            <strong>[[#{reserva.cliente}]]:</strong> [[${reserva.cliente.nombre}]]<br/>
+            <strong>[[#{reserva.vehiculo}]]:</strong> [[${reserva.vehiculo.placa}]] - [[${reserva.vehiculo.marca}]] [[${reserva.vehiculo.modelo}]]
+        </p>
+        <form method="post" th:action="@{/reserva/actualizar}" th:object="${reserva}" class="was-validated">
+            <input type="hidden" th:field="*{idReserva}"/>
+            <div class="mb-3">
+                <label for="espacio" class="form-label">[[#{reserva.espacio}]]</label>
+                <select id="espacio" name="espacio.idEspacio" class="form-select" required="true">
+                    <option th:each="e : ${espacios}" th:value="${e.idEspacio}"
+                            th:selected="${e.idEspacio == reserva.espacio.idEspacio}">
+                        [[${e.codigo}]] - [[${e.nombre}]]</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="fecha" class="form-label">[[#{reserva.fecha}]]</label>
+                <input type="date" class="form-control" th:field="*{fecha}"
+                       th:min="${#temporals.createToday()}" required="true"/>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 mb-3">
+                    <label for="horaInicio" class="form-label">[[#{reserva.horaInicio}]]</label>
+                    <input type="time" class="form-control" th:field="*{horaInicio}" required="true"/>
+                </div>
+                <div class="col-sm-6 mb-3">
+                    <label for="horaFin" class="form-label">[[#{reserva.horaFin}]]</label>
+                    <input type="time" class="form-control" th:field="*{horaFin}" required="true"/>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="motivo" class="form-label">[[#{reserva.motivo}]]</label>
+                <input type="text" class="form-control" th:field="*{motivo}" maxlength="255" required="true"/>
+            </div>
+            <div class="d-flex gap-2 justify-content-end">
+                <a th:href="@{/reserva/listado}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]</a>
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-check"></i> [[#{reserva.modificar.confirmar}]]</button>
+            </div>
+        </form>
     </div>
 </section>

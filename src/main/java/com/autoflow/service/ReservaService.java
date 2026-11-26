@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,6 +102,52 @@ public class ReservaService {
         }
         reserva.setEstado("Cancelada");
         reserva.setMotivoCancelacion(motivoCancelacion.trim());
+        reservaRepository.save(reserva);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Reserva> getReserva(Integer idReserva) {
+        return reservaRepository.findById(idReserva);
+    }
+
+    //HU-R04: solo se modifican reservas Confirmadas cuyo vehiculo aun no llego al taller
+    @Transactional(readOnly = true)
+    public boolean esModificable(Reserva reserva) {
+        return "Confirmada".equals(reserva.getEstado())
+                && !recepcionRepository.existsByReservaIdReserva(reserva.getIdReserva());
+    }
+
+    //HU-R04: cambia espacio, fecha, horario y motivo, validando de nuevo la disponibilidad
+    @Transactional
+    public void modificar(Reserva datos) {
+        Reserva reserva = reservaRepository.findById(datos.getIdReserva())
+                .orElseThrow(() -> new IllegalArgumentException("reserva.error05"));
+        if (!esModificable(reserva)) {
+            throw new IllegalArgumentException("reserva.error09");
+        }
+        if (!datos.getHoraFin().isAfter(datos.getHoraInicio())) {
+            throw new IllegalArgumentException("reserva.error02");
+        }
+        LocalDateTime inicio = LocalDateTime.of(datos.getFecha(), datos.getHoraInicio());
+        if (inicio.isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("reserva.error03");
+        }
+        Espacio espacio = espacioRepository.findById(datos.getEspacio().getIdEspacio())
+                .orElseThrow(() -> new IllegalArgumentException("reserva.error01"));
+        if (!espacio.isActivo()) {
+            throw new IllegalArgumentException("reserva.error10");
+        }
+        //Se valida la disponibilidad sin tomar en cuenta la propia reserva que se modifica
+        if (reservaRepository.existeConflicto(espacio.getIdEspacio(), datos.getFecha(),
+                datos.getHoraInicio(), datos.getHoraFin(), reserva.getIdReserva())) {
+            throw new IllegalArgumentException("reserva.error04");
+        }
+        //Cliente, vehiculo y estado no cambian
+        reserva.setEspacio(espacio);
+        reserva.setFecha(datos.getFecha());
+        reserva.setHoraInicio(datos.getHoraInicio());
+        reserva.setHoraFin(datos.getHoraFin());
+        reserva.setMotivo(datos.getMotivo());
         reservaRepository.save(reserva);
     }
 }
