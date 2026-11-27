@@ -5,6 +5,10 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
@@ -23,6 +27,7 @@ public class ProjectConfig implements WebMvcConfigurer {
         registry.addViewController("/").setViewName("index");
         registry.addViewController("/servicios").setViewName("servicios");
         registry.addViewController("/login").setViewName("login");
+        registry.addViewController("/acceso_denegado").setViewName("acceso_denegado");
     }
 
     //El idioma elegido (español por defecto)
@@ -63,5 +68,39 @@ public class ProjectConfig implements WebMvcConfigurer {
         var validador = new LocalValidatorFactoryBean();
         validador.setValidationMessageSource(messageSource());
         return validador;
+    }
+
+    //Lee el prefijo de la contrasena guardada
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    //Direcciones sin sesion: inicio de sesion, errores y archivos estaticos
+    public static final String[] PUBLIC_URLS = {
+        "/login", "/acceso_denegado", "/error", "/css/**", "/js/**", "/img/**", "/webjars/**"
+    };
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(request -> request
+                .requestMatchers(PUBLIC_URLS).permitAll()
+                .anyRequest().authenticated()
+        ).formLogin(form -> form //Formulario de inicio de sesion
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/", true)
+                .failureUrl("/login?error=true")
+                .permitAll()
+        ).logout(logout -> logout //Cierre de sesion
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout=true")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
+        ).exceptionHandling(exceptions -> exceptions //Usuario sin permiso
+                .accessDeniedPage("/acceso_denegado")
+        );
+        return http.build();
     }
 }
