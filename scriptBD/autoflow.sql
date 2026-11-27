@@ -235,3 +235,12 @@ INSERT INTO orden_servicio (fecha, estado, fecha_estado, total, id_diagnostico, 
 
 INSERT INTO detalle_orden_servicio (descripcion, cantidad, costo, id_orden) VALUES
   ("Mano de obra cambio de pastillas", 1, 25000.00, 1);
+  
+ALTER TABLE vehiculo ADD COLUMN imagen VARCHAR(255) NULL;
+
+UPDATE vehiculo SET imagen = "https://di-uploads-pod11.dealerinspire.com/rustywallacetoyota/uploads/2017/06/Corolla-Banner-2-1.png" WHERE placa = "BCD123";
+UPDATE vehiculo SET imagen = "https://di-uploads-pod9.dealerinspire.com/capitolhyundaisanjose/uploads/2020/09/2020-Tucson-Value.png"  WHERE placa = "FGH456";
+UPDATE vehiculo SET imagen = "https://img2.carmax.com/assets/mmy-nissan-sentra-2016/image/1.jpg?width=400&height=300"  WHERE placa = "JKL789";
+UPDATE vehiculo SET imagen = "https://www.suzuki.cr/media/q1clzgso/tamao-gl-_header-copia-copy.png" WHERE placa = "MNP321";
+
+SELECT placa, marca, modelo, imagen FROM vehiculo;

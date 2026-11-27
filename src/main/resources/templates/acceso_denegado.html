@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+
+        <main>
+            <section class="container py-3">
+                <div class="af-tarjeta mx-auto text-center" style="max-width: 640px;">
+                    <h1 class="af-tarjeta-titulo h4 mb-3">
+                        <i class="fa-solid fa-lock"></i> [[#{acceso.titulo}]]</h1>
+                    <p>[[#{acceso.texto}]]</p>
+                    <a th:href="@{/}" class="btn btn-primary">
+                        <i class="fa-solid fa-house"></i> [[#{plantilla.inicio}]]</a>
+                </div>
+            </section>
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+    </body>
+</html>
