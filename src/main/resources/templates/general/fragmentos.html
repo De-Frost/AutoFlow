@@ -40,10 +40,20 @@
             </ul>
         </div>
 
-        <!-- Usuario con el login  -->
-        <div class="text-center">
-            <span class="af-icono mx-auto"><i class="fa-solid fa-user"></i></span>
-            <small class="d-block text-white fw-semibold mt-1">[[#{plantilla.usuario}]]</small>
+        <!-- Cuenta: usuario conectado y cierre de sesion -->
+        <div class="dropdown text-center" sec:authorize="isAuthenticated()">
+            <button class="af-icono border-0 mx-auto" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                    th:title="#{plantilla.usuario}" th:aria-label="#{plantilla.usuario}">
+                <i class="fa-solid fa-user"></i></button>
+            <small class="d-block text-white fw-semibold mt-1" sec:authentication="name">[[#{plantilla.usuario}]]</small>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="dropdown-item">
+                            <i class="fa-solid fa-right-from-bracket"></i> [[#{sesion.cerrar}]]</button>
+                    </form>
+                </li>
+            </ul>
         </div>
     </div>
 
